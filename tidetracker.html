@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tide Tracker — Nudibranch Nerd</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+
+  <style>
+    /* ==========================================
+       TIDE TRACKER — Page Styles
+       ========================================== */
+
+    .tide-page {
+      min-height: 100vh;
+      background: var(--color-bg);
+      padding-top: var(--header-h);
+    }
+
+    /* ---- Hero banner ---- */
+    .tide-hero {
+      position: relative;
+      padding: 4rem var(--pad-x) 3.5rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .tide-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(148, 210, 255, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .tide-hero-label {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-accent-bold);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .tide-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .tide-hero-sub {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      color: rgba(148, 210, 255, 0.75);
+      letter-spacing: 0.04em;
+      margin-bottom: 2rem;
+    }
+
+    /* ---- Search controls ---- */
+    .tide-search-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .tide-search-row {
+      display: flex;
+      width: 100%;
+      gap: 0;
+      border: 1.5px solid var(--color-border);
+      border-radius: 3px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      transition: border-color 0.2s;
+    }
+
+    .tide-search-row:focus-within {
+      border-color: var(--color-accent);
+    }
+
+    #location-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0.8rem 1.1rem;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      color: #fff;
+      min-width: 0;
+    }
+
+    #location-input::placeholder {
+      color: rgba(148, 210, 255, 0.45);
+    }
+
+    #search-btn {
+      background: var(--color-accent);
+      border: none;
+      padding: 0.8rem 1.4rem;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-bg);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    #search-btn:hover {
+      background: #fff;
+    }
+
+    #search-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #locate-btn {
+      background: transparent;
+      border: 1.5px solid rgba(148, 210, 255, 0.4);
+      border-radius: 3px;
+      padding: 0.65rem 1.4rem;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #locate-btn:hover {
+      background: rgba(148, 210, 255, 0.1);
+      border-color: var(--color-accent);
+    }
+
+    #locate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .locate-icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ---- Time range selector ---- */
+    .range-selector {
+      display: flex;
+      gap: 0.4rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
+
+    .range-btn {
+      background: transparent;
+      border: 1.5px solid rgba(148, 210, 255, 0.25);
+      border-radius: 3px;
+      padding: 0.45rem 1.1rem;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(148, 210, 255, 0.55);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .range-btn:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .range-btn.active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    .range-custom-wrap {
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+
+    .range-custom-wrap.visible {
+      display: flex;
+    }
+
+    .range-custom-wrap input[type="date"] {
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(148, 210, 255, 0.3);
+      border-radius: 3px;
+      padding: 0.45rem 0.75rem;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      color: var(--color-accent);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      color-scheme: dark;
+    }
+
+    .range-custom-wrap input[type="date"]:focus {
+      border-color: var(--color-accent);
+    }
+
+    .range-custom-wrap span {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: rgba(148, 210, 255, 0.5);
+    }
+
+    #custom-apply {
+      background: var(--color-accent);
+      border: none;
+      border-radius: 3px;
+      padding: 0.45rem 1rem;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-bg);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #custom-apply:hover { background: #fff; }
+
+    /* ---- Status / error messages ---- */
+    #status-msg {
+      max-width: 680px;
+      margin: 1.25rem auto 0;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      color: rgba(148, 210, 255, 0.7);
+      text-align: center;
+      min-height: 1.3em;
+      letter-spacing: 0.03em;
+    }
+
+    #status-msg.error {
+      color: #ff8a80;
+    }
+
+    /* ---- Loading spinner ---- */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(148, 210, 255, 0.3);
+      border-top-color: var(--color-accent);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.4rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ---- Main results section ---- */
+    .tide-results {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--pad-x) 5rem;
+    }
+
+    .tide-results.hidden {
+      display: none;
+    }
+
+    /* Station attribution bar */
+    .station-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .station-name {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .station-meta {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: rgba(148, 210, 255, 0.5);
+      letter-spacing: 0.03em;
+    }
+
+    /* ---- Stat cards ---- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 1.4rem 1.25rem 1.25rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--card-accent, var(--color-accent));
+      opacity: 0.7;
+    }
+
+    .stat-card:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: var(--color-accent);
+    }
+
+    .stat-label {
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(148, 210, 255, 0.55);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .stat-value {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      color: #fff;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      display: block;
+    }
+
+    .stat-sub {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: rgba(148, 210, 255, 0.55);
+      margin-top: 0.35rem;
+      display: block;
+    }
+
+    .stat-badge {
+      display: inline-block;
+      margin-top: 0.55rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 2px;
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .badge-exceptional {
+      background: rgba(255, 186, 13, 0.15);
+      color: var(--color-accent-bold);
+      border: 1px solid rgba(255, 186, 13, 0.3);
+    }
+
+    .badge-great {
+      background: rgba(255, 140, 66, 0.15);
+      color: #FF8C42;
+      border: 1px solid rgba(255, 140, 66, 0.3);
+    }
+
+    .badge-good {
+      background: rgba(80, 227, 194, 0.12);
+      color: #50E3C2;
+      border: 1px solid rgba(80, 227, 194, 0.25);
+    }
+
+    .badge-moderate {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ---- Chart card ---- */
+    .chart-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 1.75rem 1.5rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .chart-title {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      color: rgba(148, 210, 255, 0.6);
+      letter-spacing: 0.04em;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-line {
+      width: 18px;
+      height: 2px;
+      flex-shrink: 0;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 280px;
+    }
+
+    @media (max-width: 600px) {
+      .chart-wrap {
+        height: 200px;
+      }
+    }
+
+    /* ---- Forecast paragraph ---- */
+    .forecast-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .forecast-card-label {
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-accent-bold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .forecast-text {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .forecast-text strong {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .forecast-text .highlight-gold {
+      color: var(--color-accent-bold);
+      font-weight: 500;
+    }
+
+    .forecast-text .highlight-teal {
+      color: #50E3C2;
+      font-weight: 500;
+    }
+
+    .forecast-text .highlight-blue {
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+
+    /* ---- Upcoming lows table ---- */
+    .table-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .table-title {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .table-subtitle {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      color: rgba(148, 210, 255, 0.45);
+      letter-spacing: 0.03em;
+    }
+
+    /* Table filter buttons */
+    .table-filters {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1.5px solid rgba(148, 210, 255, 0.2);
+      border-radius: 3px;
+      padding: 0.28rem 0.85rem;
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(148, 210, 255, 0.45);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .filter-btn.active {
+      background: rgba(148, 210, 255, 0.12);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .filter-btn.active.filter-exceptional {
+      background: rgba(255, 186, 13, 0.1);
+      border-color: var(--color-accent-bold);
+      color: var(--color-accent-bold);
+    }
+
+    .filter-btn.active.filter-great {
+      background: rgba(255, 140, 66, 0.1);
+      border-color: #FF8C42;
+      color: #FF8C42;
+    }
+
+    .tide-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tide-table thead tr {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .tide-table th {
+      font-family: var(--font-sans);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(148, 210, 255, 0.5);
+      padding: 0.7rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .tide-table td {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.8);
+      padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid rgba(22, 110, 174, 0.2);
+      vertical-align: middle;
+    }
+
+    .tide-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tide-table tbody tr:hover td {
+      background: rgba(148, 210, 255, 0.04);
+    }
+
+    .tide-table .col-height {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .tide-table .col-negative {
+      color: var(--color-accent-bold);
+    }
+
+    .table-empty {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      color: rgba(148, 210, 255, 0.4);
+      font-style: italic;
+    }
+
+    /* ---- Empty / placeholder state ---- */
+    .tide-placeholder {
+      text-align: center;
+      padding: 5rem var(--pad-x);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .placeholder-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.25rem;
+      opacity: 0.4;
+      filter: grayscale(1);
+    }
+
+    .placeholder-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      color: rgba(148, 210, 255, 0.5);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .placeholder-text {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      color: rgba(148, 210, 255, 0.35);
+      line-height: 1.7;
+    }
+
+    /* ---- Wave divider ---- */
+    .tide-wave-top {
+      line-height: 0;
+      margin-bottom: -1px;
+    }
+
+    .tide-wave-top svg {
+      display: block;
+      width: 100%;
+      height: 48px;
+    }
+
+    .tide-wave-top path {
+      fill: rgba(148, 210, 255, 0.05);
+    }
+
+    /* ---- Region badge in station bar ---- */
+    .region-badge {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 2px;
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(148, 210, 255, 0.1);
+      color: var(--color-accent);
+      border: 1px solid rgba(148, 210, 255, 0.2);
+      margin-left: 0.5rem;
+    }
+
+    /* ---- How to Tide Pool section ---- */
+    .how-to-section {
+      background: var(--color-card-bg);
+      padding: 6rem 10% 7rem;
+      display: none;
+    }
+
+    .how-to-section.visible {
+      display: block;
+    }
+
+    .how-to-wave {
+      line-height: 0;
+      background: var(--color-bg);
+    }
+
+    .how-to-wave svg {
+      display: block;
+      width: 100%;
+      height: 56px;
+    }
+
+    .how-to-wave path { fill: var(--color-card-bg); }
+
+    .how-to-label {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-subtle);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .how-to-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--color-bg);
+      line-height: 1;
+      margin-bottom: 3.5rem;
+    }
+
+    .how-to-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .how-to-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .how-to-section {
+        padding: 5rem var(--pad-x) 6rem;
+      }
+    }
+
+    .how-to-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .how-to-img-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .how-to-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .how-to-img-wrap:hover .how-to-img {
+      transform: scale(1.04);
+    }
+
+    .how-to-card-label {
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-subtle);
+    }
+
+    .how-to-card-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+      color: var(--color-bg);
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    .how-to-card-body {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: #555;
+    }
+
+    /* ---- Responsive tweaks ---- */
+    @media (max-width: 640px) {
+      .tide-hero {
+        padding: 3rem var(--pad-x) 2.5rem;
+      }
+
+      .range-selector {
+        gap: 0.3rem;
+      }
+
+      .range-btn {
+        padding: 0.4rem 0.85rem;
+        font-size: 0.68rem;
+      }
+
+      .station-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .tide-table th,
+      .tide-table td {
+        padding: 0.7rem 1rem;
+      }
+
+      .chart-card {
+        padding: 1.25rem 1rem 1rem;
+      }
+
+      .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header logo-visible">
+    <div class="header-inner">
+      <a href="/" class="site-logo">
+        <img src="Assets/CyanotypeTexture1.png" alt="" class="logo-img" aria-hidden="true">
+        <span class="logo-text">Nudibranch Nerd</span>
+      </a>
+      <nav class="site-nav" id="site-nav">
+        <a href="/">Home</a>
+        <a href="about.html">About</a>
+        <!-- <a href="shop.html">Shop</a> -->
+        <!-- <a href="services.html">Services</a> -->
+        <a href="contact.html">Contact</a>
+        <a href="tidetracker.html" style="color: var(--color-accent-bold);">Tide Tracker</a>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="tide-page">
+
+    <!-- HERO / SEARCH -->
+    <section class="tide-hero">
+      <span class="tide-hero-label">Plan Your Tide Pool Visit</span>
+      <h1>Tide Tracker</h1>
+      <p class="tide-hero-sub">Find the best low tides for tide pooling near any US coast</p>
+
+      <div class="tide-search-wrap">
+        <div class="tide-search-row">
+          <input
+            type="text"
+            id="location-input"
+            placeholder="City, beach, or zip code…"
+            aria-label="Location search"
+            autocomplete="off"
+          />
+          <button id="search-btn" type="button">Search</button>
+        </div>
+
+        <button id="locate-btn" type="button">
+          <svg class="locate-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 4"/>
+          </svg>
+          Use My Location
+        </button>
+
+        <!-- Time range selector -->
+        <div class="range-selector" id="range-selector">
+          <button class="range-btn active" data-range="7d">7 Days</button>
+          <button class="range-btn" data-range="14d">2 Weeks</button>
+          <button class="range-btn" data-range="30d">1 Month</button>
+          <button class="range-btn" data-range="custom">Custom</button>
+        </div>
+
+        <div class="range-custom-wrap" id="custom-range-wrap">
+          <input type="date" id="date-from" aria-label="Start date">
+          <span>to</span>
+          <input type="date" id="date-to" aria-label="End date">
+          <button id="custom-apply">Apply</button>
+        </div>
+      </div>
+
+      <p id="status-msg" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- WAVE DIVIDER -->
+    <div class="tide-wave-top" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 48" preserveAspectRatio="none">
+        <path d="M0 24 C360 8 720 40 1080 20 C1260 10 1360 32 1440 24 L1440 48 L0 48 Z"/>
+      </svg>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="tide-results hidden" id="tide-results">
+      <div class="container">
+
+        <!-- Station attribution -->
+        <div class="station-bar">
+          <div>
+            <span class="station-name" id="station-name">—</span>
+            <span class="region-badge" id="region-badge">—</span>
+          </div>
+          <span class="station-meta" id="station-meta">NOAA CO-OPS · Datum: MLLW · Local Time</span>
+        </div>
+
+        <!-- 4 stat cards -->
+        <div class="stats-grid">
+          <div class="stat-card" style="--card-accent: var(--color-accent-bold)">
+            <span class="stat-label">Next Best Low</span>
+            <span class="stat-value" id="stat-next-time">—</span>
+            <span class="stat-sub" id="stat-next-date">—</span>
+            <span id="stat-next-badge" class="stat-badge"></span>
+          </div>
+          <div class="stat-card" style="--card-accent: #50E3C2">
+            <span class="stat-label">Best Low This Period</span>
+            <span class="stat-value" id="stat-week-low">—</span>
+            <span class="stat-sub" id="stat-week-low-when">—</span>
+          </div>
+          <div class="stat-card" style="--card-accent: #50E3C2">
+            <span class="stat-label" id="stat-good-label">Good+ Lows</span>
+            <span class="stat-value" id="stat-good-count">—</span>
+            <span class="stat-sub" id="stat-good-sub">this period</span>
+          </div>
+          <div class="stat-card" style="--card-accent: var(--color-accent-bold)">
+            <span class="stat-label">Exceptional Lows</span>
+            <span class="stat-value" id="stat-exceptional-count">—</span>
+            <span class="stat-sub" id="stat-exceptional-sub">this period</span>
+          </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title" id="chart-title">7-Day Tide Height Forecast</span>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div class="legend-line" style="background: var(--color-accent);"></div>
+                Normal
+              </div>
+              <div class="legend-item">
+                <div class="legend-line" style="background: #50E3C2;"></div>
+                Good
+              </div>
+              <div class="legend-item">
+                <div class="legend-line" style="background: #FF8C42;"></div>
+                Great
+              </div>
+              <div class="legend-item">
+                <div class="legend-line" style="background: var(--color-accent-bold);"></div>
+                Exceptional
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="tide-chart" aria-label="Tide chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Written forecast -->
+        <div class="forecast-card">
+          <span class="forecast-card-label">Tide Pool Forecast</span>
+          <p class="forecast-text" id="forecast-text">Loading forecast…</p>
+        </div>
+
+        <!-- Upcoming lows table -->
+        <div class="table-card">
+          <div class="table-header">
+            <div>
+              <div class="table-title">Upcoming Low Tides</div>
+              <div class="table-subtitle" id="table-subtitle">Good+ tides · selected range</div>
+            </div>
+            <div class="table-filters">
+              <button class="filter-btn active" data-filter="good" id="filter-good">Good+</button>
+              <button class="filter-btn filter-great" data-filter="great" id="filter-great">Great+ (2 mo)</button>
+              <button class="filter-btn filter-exceptional" data-filter="exceptional" id="filter-exceptional">Exceptional (1 yr)</button>
+            </div>
+          </div>
+          <table class="tide-table" aria-label="Upcoming low tides">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Height (ft)</th>
+                <th>Quality</th>
+              </tr>
+            </thead>
+            <tbody id="lows-table-body">
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER (shown before search) -->
+    <div class="tide-placeholder" id="tide-placeholder">
+      <div class="placeholder-icon" aria-hidden="true">🌊</div>
+      <h2 class="placeholder-title">Find Your Low Tides</h2>
+      <p class="placeholder-text">
+        Enter a coastal US location or use your device's GPS to find the nearest NOAA tide station.
+        Tides are predicted using official NOAA CO-OPS data — quality thresholds are calibrated by region
+        using real annual tide data. Perfect for planning your next tide pool adventure.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- HOW TO TIDE POOL — wave + cream section outside main -->
+  <div class="how-to-wave" aria-hidden="true" id="how-to-wave" style="display:none;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 56" preserveAspectRatio="none">
+      <path d="M0 20 C360 56 720 0 1080 36 C1260 52 1380 16 1440 28 L1440 56 L0 56 Z"/>
+    </svg>
+  </div>
+
+  <section class="how-to-section" id="how-to-section" aria-labelledby="how-to-heading">
+    <span class="how-to-label">Tips from Madi</span>
+    <h2 class="how-to-title" id="how-to-heading">How to Tide Pool</h2>
+    <div class="how-to-grid">
+
+      <div class="how-to-card">
+        <div class="how-to-img-wrap">
+          <img src="Assets/Tide-Pool-Portrait.jpeg" alt="Tide pooling safety" class="how-to-img" loading="lazy">
+        </div>
+        <span class="how-to-card-label">Safety First</span>
+        <h3 class="how-to-card-title">Know Before You Go</h3>
+        <p class="how-to-card-body">Check tide charts before you go — a rising tide can trap you on rocks. Wear non-slip shoes, never turn your back on the ocean, and always go with a buddy.</p>
+      </div>
+
+      <div class="how-to-card">
+        <div class="how-to-img-wrap">
+          <img src="Assets/Sea-Slug-1.JPG" alt="Sea slug in a tide pool" class="how-to-img" loading="lazy">
+        </div>
+        <span class="how-to-card-label">Timing is Everything</span>
+        <h3 class="how-to-card-title">Ride the Receding Tide</h3>
+        <p class="how-to-card-body">Arrive 1–2 hours before the predicted low tide. The water recedes slowly, giving you time to explore as pools are revealed. The lower the tide, the more of the intertidal world you'll see.</p>
+      </div>
+
+      <div class="how-to-card">
+        <div class="how-to-img-wrap">
+          <img src="Assets/Sea-Slug-2.JPG" alt="Colorful sea life in a tidal pool" class="how-to-img" loading="lazy">
+        </div>
+        <span class="how-to-card-label">Leave No Trace</span>
+        <h3 class="how-to-card-title">Look, Don't Disturb</h3>
+        <p class="how-to-card-body">Look, but don't touch — or if you do, be gentle. Return any rocks you overturn. Take only memories and photos. These ecosystems are fragile and every visitor counts.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-logo">Nudibranch Nerd</p>
+      <div class="footer-right">
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="tidetracker.html">Tide Tracker</a>
+        </nav>
+        <p class="footer-email"><a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="tideConstants.js"></script>
+  <script>
+    /* ==========================================
+       TIDE TRACKER — Application Logic
+       ========================================== */
+
+    const NOAA_BASE   = 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter';
+    const NOAA_MDAPI  = 'https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?type=tidepredictions';
+    const NOMINATIM   = 'https://nominatim.openstreetmap.org';
+    const MAX_DIST_KM = 800;
+    const SESSION_KEY = 'noaa_tide_stations_v2';
+
+    // ---- DOM refs ----
+    const locationInput   = document.getElementById('location-input');
+    const searchBtn       = document.getElementById('search-btn');
+    const locateBtn       = document.getElementById('locate-btn');
+    const statusMsg       = document.getElementById('status-msg');
+    const tideResults     = document.getElementById('tide-results');
+    const tidePlaceholder = document.getElementById('tide-placeholder');
+    const howToSection    = document.getElementById('how-to-section');
+    const howToWave       = document.getElementById('how-to-wave');
+    const dateFrom        = document.getElementById('date-from');
+    const dateTo          = document.getElementById('date-to');
+    const customRangeWrap = document.getElementById('custom-range-wrap');
+
+    // ---- State ----
+    let tideChart         = null;
+    let currentRange      = '7d';
+    let customFromDate    = null;
+    let customToDate      = null;
+    let currentThresholds = null;
+    let currentStation    = null;
+    let currentStationLat = null;
+    let currentStationLon = null;
+    let tableFilter       = 'good';
+    const hiloCache       = new Map();
+    const hourlyCache     = new Map();
+
+    // ---- Region helpers ----
+
+    function getRegionThresholds(lat, lon) {
+      if (typeof TIDE_REGIONS !== 'undefined') {
+        for (const r of TIDE_REGIONS) {
+          if (lat >= r.latMin && lat <= r.latMax && lon >= r.lonMin && lon <= r.lonMax) {
+            return { ...r.thresholds, regionName: r.name };
+          }
+        }
+      }
+      const def = typeof TIDE_THRESHOLDS_DEFAULT !== 'undefined'
+        ? TIDE_THRESHOLDS_DEFAULT
+        : { exceptional: -0.5, great: 0.0, good: 0.5 };
+      return { ...def, regionName: 'General' };
+    }
+
+    // ---- Quality classification ----
+
+    function tideQuality(heightFt, thresholds) {
+      if (heightFt <= thresholds.exceptional) return 'Exceptional';
+      if (heightFt <= thresholds.great)       return 'Great';
+      if (heightFt <= thresholds.good)        return 'Good';
+      return 'Moderate';
+    }
+
+    function qualityBadgeClass(q) {
+      if (q === 'Exceptional') return 'badge-exceptional';
+      if (q === 'Great')       return 'badge-great';
+      if (q === 'Good')        return 'badge-good';
+      return 'badge-moderate';
+    }
+
+    // ---- Range helpers ----
+
+    function rangeToDays() {
+      if (currentRange === '7d')  return 7;
+      if (currentRange === '14d') return 14;
+      if (currentRange === '30d') return 30;
+      if (currentRange === 'custom' && customFromDate && customToDate) {
+        const ms = customToDate - customFromDate;
+        return Math.max(1, Math.ceil(ms / (1000 * 60 * 60 * 24)));
+      }
+      return 7;
+    }
+
+    function rangeStartDate() {
+      if (currentRange === 'custom' && customFromDate) return new Date(customFromDate);
+      return new Date();
+    }
+
+    function rangeLabel() {
+      if (currentRange === '7d')  return '7-Day';
+      if (currentRange === '14d') return '2-Week';
+      if (currentRange === '30d') return '1-Month';
+      if (currentRange === 'custom') return 'Custom Range';
+      return '7-Day';
+    }
+
+    // ---- Date formatting ----
+
+    function toNoaaDate(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}${m}${day}`;
+    }
+
+    function formatTime(noaaTimeStr) {
+      const parts = noaaTimeStr.split(' ');
+      const [h, m] = parts[1].split(':').map(Number);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const hour12 = h % 12 || 12;
+      return `${hour12}:${String(m).padStart(2, '0')} ${ampm}`;
+    }
+
+    function formatDate(noaaTimeStr) {
+      const dt = new Date(noaaTimeStr.replace(' ', 'T'));
+      return dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+
+    // ---- Status helpers ----
+
+    function setStatus(msg, isError = false) {
+      statusMsg.innerHTML = msg;
+      statusMsg.className = isError ? 'error' : '';
+    }
+
+    function setLoading(loading) {
+      searchBtn.disabled = loading;
+      locateBtn.disabled = loading;
+      if (loading) setStatus('<span class="spinner" aria-hidden="true"></span>Loading tide data…');
+    }
+
+    function showResults() {
+      tideResults.classList.remove('hidden');
+      tidePlaceholder.style.display = 'none';
+      howToSection.classList.add('visible');
+      howToWave.style.display = '';
+    }
+
+    function hideResults() {
+      tideResults.classList.add('hidden');
+      tidePlaceholder.style.display = '';
+    }
+
+    // ---- Station cache ----
+
+    async function fetchStations() {
+      const cached = sessionStorage.getItem(SESSION_KEY);
+      if (cached) { try { return JSON.parse(cached); } catch {} }
+      const res = await fetch(NOAA_MDAPI);
+      if (!res.ok) throw new Error('Could not fetch NOAA station list');
+      const data = await res.json();
+      const stations = (data.stations || []).map(s => ({
+        id:    s.id,
+        name:  s.name,
+        state: s.state || '',
+        lat:   parseFloat(s.lat),
+        lng:   parseFloat(s.lng),
+      })).filter(s => !isNaN(s.lat) && !isNaN(s.lng));
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(stations));
+      return stations;
+    }
+
+    function haversine(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2)**2 +
+        Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    async function nearestStation(lat, lon) {
+      const stations = await fetchStations();
+      let best = null, bestDist = Infinity;
+      for (const s of stations) {
+        const d = haversine(lat, lon, s.lat, s.lng);
+        if (d < bestDist) { bestDist = d; best = s; }
+      }
+      return { station: best, distKm: bestDist };
+    }
+
+    // ---- Geocoding ----
+
+    async function geocode(query) {
+      const url = `${NOMINATIM}/search?q=${encodeURIComponent(query)}&format=json&limit=1&countrycodes=us`;
+      const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+      if (!res.ok) throw new Error('Geocoding request failed');
+      const data = await res.json();
+      if (!data.length) throw new Error(`No results found for "${query}"`);
+      return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), display: data[0].display_name };
+    }
+
+    async function reverseGeocode(lat, lon) {
+      try {
+        const res = await fetch(`${NOMINATIM}/reverse?lat=${lat}&lon=${lon}&format=json`, { headers: { 'Accept-Language': 'en' } });
+        const data = await res.json();
+        const addr = data.address || {};
+        return [addr.city || addr.town || addr.county || '', addr.state || ''].filter(Boolean).join(', ');
+      } catch { return `${lat.toFixed(2)}, ${lon.toFixed(2)}`; }
+    }
+
+    // ---- NOAA fetch with caching ----
+
+    async function fetchHiLoCached(stationId, days, startDate) {
+      const startKey = startDate ? toNoaaDate(startDate) : 'today';
+      const key = `hilo:${stationId}:${days}:${startKey}`;
+      if (hiloCache.has(key)) return hiloCache.get(key);
+      const begin = startDate ? toNoaaDate(startDate) : toNoaaDate(new Date());
+      const hours = days * 24;
+      const url = `${NOAA_BASE}?product=predictions&datum=MLLW&time_zone=lst_ldt&interval=hilo` +
+        `&units=english&application=nudibranchnerd&format=json` +
+        `&station=${stationId}&begin_date=${begin}&range=${hours}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message || 'NOAA API error');
+      const preds = data.predictions || [];
+      hiloCache.set(key, preds);
+      return preds;
+    }
+
+    async function fetchHourlyCached(stationId, days, startDate) {
+      const startKey = startDate ? toNoaaDate(startDate) : 'today';
+      const key = `hourly:${stationId}:${days}:${startKey}`;
+      if (hourlyCache.has(key)) return hourlyCache.get(key);
+      const begin = startDate ? toNoaaDate(startDate) : toNoaaDate(new Date());
+      const hours = Math.min(days * 24, 8760); // cap at 1 year for hourly
+      const url = `${NOAA_BASE}?product=predictions&datum=MLLW&time_zone=lst_ldt&interval=h` +
+        `&units=english&application=nudibranchnerd&format=json` +
+        `&station=${stationId}&begin_date=${begin}&range=${hours}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message || 'NOAA API error');
+      const preds = data.predictions || [];
+      hourlyCache.set(key, preds);
+      return preds;
+    }
+
+    // ---- Chart ----
+
+    function renderChart(hourly, hiLo, thresholds) {
+      const ctx = document.getElementById('tide-chart').getContext('2d');
+      const labels  = hourly.map(p => p.t);
+      const heights = hourly.map(p => parseFloat(p.v));
+
+      // Low tide marker positions
+      const lowTimes = new Set(hiLo.filter(p => p.type === 'L').map(l => l.t));
+      const pointRadius = hourly.map(p => lowTimes.has(p.t) ? 5 : 0);
+      const pointBg     = hourly.map(p => {
+        if (!lowTimes.has(p.t)) return 'transparent';
+        const q = tideQuality(parseFloat(p.v), thresholds);
+        if (q === 'Exceptional') return '#FFBA0D';
+        if (q === 'Great')       return '#FF8C42';
+        if (q === 'Good')        return '#50E3C2';
+        return 'rgba(148,210,255,0.6)';
+      });
+
+      // Chart title
+      document.getElementById('chart-title').textContent =
+        `${rangeLabel()} Tide Height Forecast`;
+
+      // Determine chart y-axis min sensibly
+      const minHeight = Math.min(...heights);
+      const yMin = Math.floor(Math.min(minHeight, thresholds.exceptional) - 0.5);
+
+      if (tideChart) tideChart.destroy();
+
+      tideChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Tide Height (ft)',
+            data: heights,
+            borderColor: '#94D2FF',
+            borderWidth: 2,
+            backgroundColor(context) {
+              const chart = context.chart;
+              const { ctx: c, chartArea } = chart;
+              if (!chartArea) return 'transparent';
+              const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+              gradient.addColorStop(0, 'rgba(148, 210, 255, 0.18)');
+              gradient.addColorStop(1, 'rgba(148, 210, 255, 0.0)');
+              return gradient;
+            },
+            fill: true,
+            tension: 0.4,
+            pointRadius,
+            pointBackgroundColor: pointBg,
+            pointBorderColor: pointBg,
+            pointBorderWidth: 2,
+            pointHoverRadius: hourly.map(p => lowTimes.has(p.t) ? 8 : 3),
+            pointHoverBackgroundColor: '#FFBA0D',
+            segment: {
+              borderColor(ctx) {
+                const minY = Math.min(ctx.p0.parsed.y, ctx.p1.parsed.y);
+                if (minY <= thresholds.exceptional) return '#FFBA0D';
+                if (minY <= thresholds.great)       return '#FF8C42';
+                if (minY <= thresholds.good)        return '#50E3C2';
+                return '#94D2FF';
+              }
+            }
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 600 },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(10, 30, 60, 0.92)',
+              borderColor: 'rgba(148, 210, 255, 0.3)',
+              borderWidth: 1,
+              titleColor: '#94D2FF',
+              bodyColor: '#fff',
+              padding: 10,
+              titleFont: { family: 'Inter', size: 11, weight: '500' },
+              bodyFont:  { family: 'Inter', size: 12 },
+              callbacks: {
+                title(items) {
+                  const raw = items[0].label;
+                  return formatDate(raw) + ' · ' + formatTime(raw);
+                },
+                label(item) {
+                  const val = item.raw.toFixed(2);
+                  const q = tideQuality(item.raw, thresholds);
+                  const isLow = lowTimes.has(item.label);
+                  return isLow
+                    ? `Low tide: ${val} ft  (${q})`
+                    : `Height: ${val} ft`;
+                }
+              }
+            },
+            annotation: {
+              annotations: {
+                // Zone bands (stacked, non-overlapping)
+                goodZoneBand: {
+                  type: 'box',
+                  yScaleID: 'y',
+                  yMin: thresholds.great,
+                  yMax: thresholds.good,
+                  backgroundColor: 'rgba(80,227,194,0.07)',
+                  borderWidth: 0,
+                },
+                greatZoneBand: {
+                  type: 'box',
+                  yScaleID: 'y',
+                  yMin: thresholds.exceptional,
+                  yMax: thresholds.great,
+                  backgroundColor: 'rgba(255,140,66,0.09)',
+                  borderWidth: 0,
+                },
+                exceptionalZoneBand: {
+                  type: 'box',
+                  yScaleID: 'y',
+                  yMin: yMin - 1,
+                  yMax: thresholds.exceptional,
+                  backgroundColor: 'rgba(255,186,13,0.12)',
+                  borderWidth: 0,
+                },
+                // Threshold lines
+                goodLine: {
+                  type: 'line',
+                  yMin: thresholds.good,
+                  yMax: thresholds.good,
+                  borderColor: 'rgba(80,227,194,0.35)',
+                  borderWidth: 1,
+                  borderDash: [4, 4],
+                  label: {
+                    display: true,
+                    content: `Good  ${thresholds.good > 0 ? '+' : ''}${thresholds.good.toFixed(2)}ft`,
+                    position: 'end',
+                    color: 'rgba(80,227,194,0.7)',
+                    font: { family: 'Inter', size: 9 },
+                    backgroundColor: 'transparent',
+                    padding: 2,
+                  }
+                },
+                greatLine: {
+                  type: 'line',
+                  yMin: thresholds.great,
+                  yMax: thresholds.great,
+                  borderColor: 'rgba(255,140,66,0.4)',
+                  borderWidth: 1,
+                  borderDash: [4, 4],
+                  label: {
+                    display: true,
+                    content: `Great  ${thresholds.great > 0 ? '+' : ''}${thresholds.great.toFixed(2)}ft`,
+                    position: 'end',
+                    color: 'rgba(255,140,66,0.8)',
+                    font: { family: 'Inter', size: 9 },
+                    backgroundColor: 'transparent',
+                    padding: 2,
+                  }
+                },
+                exceptionalLine: {
+                  type: 'line',
+                  yMin: thresholds.exceptional,
+                  yMax: thresholds.exceptional,
+                  borderColor: 'rgba(255,186,13,0.45)',
+                  borderWidth: 1,
+                  borderDash: [4, 4],
+                  label: {
+                    display: true,
+                    content: `Exceptional  ${thresholds.exceptional > 0 ? '+' : ''}${thresholds.exceptional.toFixed(2)}ft`,
+                    position: 'end',
+                    color: 'rgba(255,186,13,0.9)',
+                    font: { family: 'Inter', size: 9 },
+                    backgroundColor: 'transparent',
+                    padding: 2,
+                  }
+                },
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: 'rgba(148, 210, 255, 0.45)',
+                font: { family: 'Inter', size: 10 },
+                maxTicksLimit: rangeToDays() <= 7 ? 14 : rangeToDays() <= 14 ? 14 : 10,
+                maxRotation: 0,
+                callback(value, index) {
+                  const lbl = this.getLabelForValue(value);
+                  if (!lbl) return '';
+                  const days = rangeToDays();
+                  if (days <= 14) {
+                    if (lbl.includes(' 00:00')) return formatDate(lbl).replace(/\w+,\s/, '');
+                    if (days <= 7 && lbl.includes(' 12:00')) return 'noon';
+                    return '';
+                  }
+                  // Monthly: show every 3rd day
+                  if (lbl.includes(' 00:00')) {
+                    const d = new Date(lbl.replace(' ', 'T'));
+                    if (d.getDate() % 3 === 1) return formatDate(lbl).replace(/\w+,\s/, '');
+                  }
+                  return '';
+                }
+              },
+              grid: { color: 'rgba(22, 110, 174, 0.18)', drawBorder: false },
+              border: { display: false }
+            },
+            y: {
+              min: yMin,
+              ticks: {
+                color: 'rgba(148, 210, 255, 0.45)',
+                font: { family: 'Inter', size: 10 },
+                callback: v => (v >= 0 ? '+' : '') + v.toFixed(1) + ' ft',
+                maxTicksLimit: 7,
+              },
+              grid: { color: 'rgba(22, 110, 174, 0.18)', drawBorder: false },
+              border: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // ---- Forecast text ----
+
+    function buildForecast(hiLo, stationName, thresholds) {
+      const lows = hiLo.filter(p => p.type === 'L');
+      if (!lows.length) return 'No low tide data available for this period.';
+      const now = new Date();
+      const futureLows = lows.filter(l => new Date(l.t.replace(' ', 'T')) > now);
+      const goodPlus = lows.filter(l => tideQuality(parseFloat(l.v), thresholds) !== 'Moderate');
+      const nextGood = futureLows.find(l => tideQuality(parseFloat(l.v), thresholds) !== 'Moderate');
+      const lowest   = lows.reduce((m, l) => parseFloat(l.v) < parseFloat(m.v) ? l : m);
+      const lowestHt = parseFloat(lowest.v);
+      const lowestQ  = tideQuality(lowestHt, thresholds);
+
+      if (!futureLows.length) {
+        return `All low tides for this period have already passed at <strong>${stationName}</strong>. Check back after adjusting your date range.`;
+      }
+
+      const qualityProse = {
+        Exceptional: 'an <span class="highlight-gold">exceptional</span> tide — one of the rarest low exposures of the year.',
+        Great:       'a <span class="highlight-gold">great</span> tide pooling opportunity with deep intertidal access.',
+        Good:        'a <span class="highlight-teal">good</span> tide for exploring — solid low-intertidal exposure.',
+        Moderate:    'a moderate tide; upper and mid-intertidal zones will be accessible.',
+      };
+
+      let nextGoodSentence = '';
+      if (nextGood) {
+        const nHt = parseFloat(nextGood.v);
+        const nQ  = tideQuality(nHt, thresholds);
+        nextGoodSentence = `The next quality low tide at <strong>${stationName}</strong> is on <strong>${formatDate(nextGood.t)} at ${formatTime(nextGood.t)}</strong>, reaching <span class="${nQ === 'Exceptional' || nQ === 'Great' ? 'highlight-gold' : 'highlight-teal'}">${nHt >= 0 ? '+' : ''}${nHt.toFixed(2)} ft</span>. That's ${qualityProse[nQ]}`;
+      } else {
+        nextGoodSentence = `There are no Good+ low tides in the current window at <strong>${stationName}</strong>. Try extending your date range or search a different location.`;
+      }
+
+      const lowestSentence = goodPlus.length
+        ? ` The <strong>best tide of the period</strong> is on <strong>${formatDate(lowest.t)} at ${formatTime(lowest.t)}</strong> at <span class="${lowestQ !== 'Moderate' ? 'highlight-gold' : ''}">${lowestHt >= 0 ? '+' : ''}${lowestHt.toFixed(2)} ft</span> (${lowestQ}).`
+        : '';
+
+      const countSentence = ` There ${goodPlus.length === 1 ? 'is' : 'are'} <strong>${goodPlus.length} quality low tide${goodPlus.length !== 1 ? 's' : ''}</strong> (Good or better) in this ${rangeLabel().toLowerCase()} window.`;
+
+      return nextGoodSentence + lowestSentence + countSentence;
+    }
+
+    // ---- Table rendering ----
+
+    function renderTable(hiLo, thresholds, filter) {
+      const tbody = document.getElementById('lows-table-body');
+      const subtitle = document.getElementById('table-subtitle');
+      const lows = hiLo.filter(p => p.type === 'L');
+
+      let filtered;
+      let subtitleText;
+
+      if (filter === 'exceptional') {
+        filtered = lows.filter(l => tideQuality(parseFloat(l.v), thresholds) === 'Exceptional');
+        subtitleText = `Exceptional tides only · 1-year window`;
+      } else if (filter === 'great') {
+        filtered = lows.filter(l => {
+          const q = tideQuality(parseFloat(l.v), thresholds);
+          return q === 'Exceptional' || q === 'Great';
+        });
+        subtitleText = `Great+ tides · 2-month window`;
+      } else {
+        // good+ filter — use current range data
+        filtered = lows.filter(l => tideQuality(parseFloat(l.v), thresholds) !== 'Moderate');
+        subtitleText = `Good+ tides · ${rangeLabel().toLowerCase()} window`;
+      }
+
+      subtitle.textContent = subtitleText;
+
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="4" class="table-empty">No ${filter} tides found in this window.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(l => {
+        const ht = parseFloat(l.v);
+        const q  = tideQuality(ht, thresholds);
+        return `<tr>
+          <td>${formatDate(l.t)}</td>
+          <td>${formatTime(l.t)}</td>
+          <td class="col-height${ht < 0 ? ' col-negative' : ''}">${ht >= 0 ? '+' : ''}${ht.toFixed(2)} ft</td>
+          <td><span class="stat-badge ${qualityBadgeClass(q)}">${q}</span></td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ---- UI population ----
+
+    function populateUI(station, hourly, hiLo, thresholds) {
+      const lows = hiLo.filter(p => p.type === 'L');
+      const now  = new Date();
+      const stationLabel = `${station.name}${station.state ? ', ' + station.state : ''}`;
+
+      // Station bar
+      document.getElementById('station-name').textContent =
+        `${stationLabel} (ID: ${station.id})`;
+      document.getElementById('region-badge').textContent = thresholds.regionName || 'General';
+
+      // ── Stat 1: Next best low — the single lowest future low in the period
+      const futureLows = lows.filter(l => new Date(l.t.replace(' ', 'T')) > now);
+      const nextBest   = futureLows.length
+        ? futureLows.reduce((m, l) => parseFloat(l.v) < parseFloat(m.v) ? l : m)
+        : null;
+      if (nextBest) {
+        document.getElementById('stat-next-time').textContent = formatTime(nextBest.t);
+        document.getElementById('stat-next-date').textContent = formatDate(nextBest.t);
+        const ht = parseFloat(nextBest.v);
+        const q  = tideQuality(ht, thresholds);
+        const badge = document.getElementById('stat-next-badge');
+        badge.textContent = (ht >= 0 ? '+' : '') + ht.toFixed(2) + ' ft · ' + q;
+        badge.className = `stat-badge ${qualityBadgeClass(q)}`;
+      } else {
+        document.getElementById('stat-next-time').textContent = 'None';
+        document.getElementById('stat-next-date').textContent = 'in this range';
+        document.getElementById('stat-next-badge').textContent = '';
+      }
+
+      // ── Stat 2: Best low this period
+      if (lows.length) {
+        const lowest = lows.reduce((m, l) => parseFloat(l.v) < parseFloat(m.v) ? l : m);
+        const lht = parseFloat(lowest.v);
+        document.getElementById('stat-week-low').textContent =
+          (lht >= 0 ? '+' : '') + lht.toFixed(2) + ' ft';
+        document.getElementById('stat-week-low-when').textContent =
+          formatDate(lowest.t) + ' · ' + formatTime(lowest.t);
+      }
+
+      // ── Stat 3: Good+ count
+      const goodPlus = lows.filter(l => tideQuality(parseFloat(l.v), thresholds) !== 'Moderate');
+      document.getElementById('stat-good-count').textContent = goodPlus.length;
+      document.getElementById('stat-good-label').textContent = 'Good+ Lows';
+      document.getElementById('stat-good-sub').textContent = rangeLabel().toLowerCase() + ' range';
+
+      // ── Stat 4: Exceptional count
+      const exceptional = lows.filter(l => tideQuality(parseFloat(l.v), thresholds) === 'Exceptional');
+      document.getElementById('stat-exceptional-count').textContent = exceptional.length;
+      document.getElementById('stat-exceptional-sub').textContent = rangeLabel().toLowerCase() + ' range';
+
+      // ── Chart
+      renderChart(hourly, hiLo, thresholds);
+
+      // ── Forecast
+      document.getElementById('forecast-text').innerHTML =
+        buildForecast(hiLo, stationLabel, thresholds);
+
+      // ── Table (default: good+ filter, current range)
+      renderTable(hiLo, thresholds, tableFilter);
+
+      showResults();
+      setStatus('');
+      document.title = `Tide Tracker — ${stationLabel} — Nudibranch Nerd`;
+    }
+
+    // ---- Filter button handler ----
+
+    async function applyTableFilter(filter) {
+      if (!currentStation || !currentThresholds) return;
+      tableFilter = filter;
+
+      // Update active state
+      ['good', 'great', 'exceptional'].forEach(f => {
+        document.getElementById(`filter-${f}`).classList.toggle('active', f === filter);
+      });
+
+      let days = rangeToDays();
+      let startDate = rangeStartDate();
+
+      if (filter === 'great') {
+        days = 60;
+        startDate = new Date();
+      } else if (filter === 'exceptional') {
+        days = 365;
+        startDate = new Date();
+      }
+
+      try {
+        setStatus('<span class="spinner" aria-hidden="true"></span>Loading extended tide data…');
+        const hiLo = await fetchHiLoCached(currentStation.id, days, startDate);
+        renderTable(hiLo, currentThresholds, filter);
+        setStatus('');
+      } catch (err) {
+        setStatus(err.message || 'Failed to load tide data.', true);
+      }
+    }
+
+    // ---- Main search flow ----
+
+    async function runSearch(lat, lon, locationLabel) {
+      setLoading(true);
+      try {
+        setStatus('<span class="spinner" aria-hidden="true"></span>Finding nearest NOAA station…');
+        const { station, distKm } = await nearestStation(lat, lon);
+
+        if (!station) throw new Error('No NOAA tide stations found. Please try a US coastal location.');
+        if (distKm > MAX_DIST_KM) {
+          throw new Error(
+            `The nearest NOAA station is ${Math.round(distKm)} km away. ` +
+            `This tool covers US coastal waters — please try a location near the ocean.`
+          );
+        }
+
+        currentStation    = station;
+        currentStationLat = station.lat;
+        currentStationLon = station.lng;
+        currentThresholds = getRegionThresholds(station.lat, station.lng);
+        tableFilter       = 'good';
+
+        // Reset filter buttons to default
+        ['good', 'great', 'exceptional'].forEach(f => {
+          document.getElementById(`filter-${f}`).classList.toggle('active', f === 'good');
+        });
+
+        setStatus(`<span class="spinner" aria-hidden="true"></span>Loading tide data from ${station.name}…`);
+
+        const days      = rangeToDays();
+        const startDate = rangeStartDate();
+
+        const [hourly, hiLo] = await Promise.all([
+          fetchHourlyCached(station.id, days, startDate),
+          fetchHiLoCached(station.id, days, startDate),
+        ]);
+
+        if (!hourly.length || !hiLo.length) {
+          throw new Error(`No tide predictions available for ${station.name}. Try a different location.`);
+        }
+
+        populateUI(station, hourly, hiLo, currentThresholds);
+
+      } catch (err) {
+        setStatus(err.message || 'Something went wrong. Please try again.', true);
+        hideResults();
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function reloadForRange() {
+      if (!currentStation) return;
+      setLoading(true);
+      try {
+        setStatus('<span class="spinner" aria-hidden="true"></span>Updating tide data…');
+        tableFilter = 'good';
+        ['good', 'great', 'exceptional'].forEach(f => {
+          document.getElementById(`filter-${f}`).classList.toggle('active', f === 'good');
+        });
+
+        const days      = rangeToDays();
+        const startDate = rangeStartDate();
+
+        const [hourly, hiLo] = await Promise.all([
+          fetchHourlyCached(currentStation.id, days, startDate),
+          fetchHiLoCached(currentStation.id, days, startDate),
+        ]);
+
+        populateUI(currentStation, hourly, hiLo, currentThresholds);
+      } catch (err) {
+        setStatus(err.message || 'Failed to reload tide data.', true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ---- Event listeners ----
+
+    searchBtn.addEventListener('click', async () => {
+      const query = locationInput.value.trim();
+      if (!query) {
+        locationInput.focus();
+        setStatus('Please enter a location to search.', true);
+        return;
+      }
+      setLoading(true);
+      try {
+        setStatus('<span class="spinner" aria-hidden="true"></span>Geocoding location…');
+        const { lat, lon } = await geocode(query);
+        await runSearch(lat, lon, query);
+      } catch (err) {
+        setStatus(err.message || 'Geocoding failed. Try a more specific location.', true);
+        hideResults();
+        setLoading(false);
+      }
+    });
+
+    locationInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') searchBtn.click();
+    });
+
+    locateBtn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        setStatus('Geolocation is not supported by your browser.', true);
+        return;
+      }
+      setLoading(true);
+      setStatus('<span class="spinner" aria-hidden="true"></span>Getting your location…');
+      navigator.geolocation.getCurrentPosition(
+        async pos => {
+          const { latitude: lat, longitude: lon } = pos.coords;
+          const label = await reverseGeocode(lat, lon);
+          locationInput.value = label;
+          await runSearch(lat, lon, label);
+        },
+        err => {
+          const msgs = {
+            1: 'Location access was denied. Please enable location permissions or search manually.',
+            2: 'Your location could not be determined. Please search manually.',
+            3: 'Location request timed out. Please try again.',
+          };
+          setStatus(msgs[err.code] || 'Could not get your location.', true);
+          setLoading(false);
+        },
+        { timeout: 10000, maximumAge: 60000 }
+      );
+    });
+
+    // Range selector
+    document.getElementById('range-selector').addEventListener('click', e => {
+      const btn = e.target.closest('.range-btn');
+      if (!btn) return;
+      const range = btn.dataset.range;
+      currentRange = range;
+
+      document.querySelectorAll('.range-btn').forEach(b => b.classList.toggle('active', b === btn));
+      customRangeWrap.classList.toggle('visible', range === 'custom');
+
+      if (range !== 'custom') reloadForRange();
+    });
+
+    // Custom date apply
+    document.getElementById('custom-apply').addEventListener('click', () => {
+      const from = dateFrom.value;
+      const to   = dateTo.value;
+      if (!from || !to) {
+        setStatus('Please select both a start and end date.', true);
+        return;
+      }
+      customFromDate = new Date(from + 'T00:00:00');
+      customToDate   = new Date(to   + 'T23:59:59');
+      if (customToDate <= customFromDate) {
+        setStatus('End date must be after start date.', true);
+        return;
+      }
+      reloadForRange();
+    });
+
+    // Set default date inputs to today + 2 weeks
+    (function initDateInputs() {
+      const today = new Date();
+      const twoWeeks = new Date(today);
+      twoWeeks.setDate(today.getDate() + 14);
+      dateFrom.value = today.toISOString().slice(0, 10);
+      dateTo.value   = twoWeeks.toISOString().slice(0, 10);
+    })();
+
+    // Table filter buttons
+    ['good', 'great', 'exceptional'].forEach(f => {
+      document.getElementById(`filter-${f}`).addEventListener('click', () => applyTableFilter(f));
+    });
+
+    // Header logo always visible on this page
+    document.querySelector('.site-header')?.classList.add('logo-visible');
+  </script>
+</body>
+</html>

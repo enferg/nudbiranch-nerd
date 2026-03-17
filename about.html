@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Nudibranch Nerd</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── ABOUT HERO ─────────────────────────── */
+    .about-hero {
+      background-image: url('Assets/Tide-Pool-Portrait.jpeg');
+    }
+
+    .about-hero-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 1rem;
+      padding: 0 var(--pad-x);
+    }
+
+    .about-hero-content h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      color: var(--color-accent);
+      line-height: 1;
+    }
+
+    .about-hero-content p {
+      font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── BIO SECTIONS ───────────────────────── */
+    .bio-section {
+      position: relative;
+      padding: 8rem 10%;
+    }
+
+    .bio-blue  { background: var(--color-bg); }
+    .bio-cream { background: var(--color-card-bg); }
+
+    .bio-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .bio-split--reverse { direction: rtl; }
+    .bio-split--reverse > * { direction: ltr; }
+
+    .bio-label {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent-bold);
+      margin-bottom: 0.75rem;
+    }
+
+    .bio-blue .bio-label  { color: var(--color-accent-bold); }
+    .bio-cream .bio-label { color: var(--color-subtle); }
+
+    .bio-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .bio-blue  .bio-heading { color: var(--color-accent); }
+    .bio-cream .bio-heading { color: var(--color-bg); }
+
+    .bio-body {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .bio-blue  .bio-body { color: rgba(255,255,255,0.82); }
+    .bio-cream .bio-body { color: #444; }
+
+    .bio-img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+
+    .bio-img-wrap--rounded {
+      border-radius: 8px;
+      aspect-ratio: 4 / 5;
+    }
+
+    .bio-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    /* ── STAT STRIP ─────────────────────────── */
+    .stat-strip {
+      display: flex;
+      gap: 3rem;
+      margin: 2rem 0;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      color: var(--color-accent-bold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── CLOSING ────────────────────────────── */
+    .bio-closing {
+      text-align: center;
+      padding-top: 9rem;
+      padding-bottom: 9rem;
+    }
+
+    .bio-closing .bio-heading {
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .bio-closing .bio-body {
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── WAVE HELPERS ───────────────────────── */
+    .wave-to-blue {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      line-height: 0;
+    }
+
+    .wave-to-blue svg {
+      display: block;
+      width: 100%;
+      height: 72px;
+    }
+
+    .wave-to-blue path { fill: var(--color-bg); }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 768px) {
+      .bio-split,
+      .bio-split--reverse {
+        grid-template-columns: 1fr;
+        direction: ltr;
+        gap: 2.5rem;
+      }
+
+      .bio-section { padding: 5rem var(--pad-x); }
+
+      .stat-strip { gap: 2rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="site-logo">
+        <img src="Assets/CyanotypeTexture1.png" alt="" class="logo-img" aria-hidden="true">
+        <span class="logo-text">Nudibranch Nerd</span>
+      </a>
+      <nav class="site-nav" id="site-nav">
+        <a href="/">Home</a>
+        <a href="about.html">About</a>
+        <!-- <a href="shop.html">Shop</a> -->
+        <!-- <a href="services.html">Services</a> -->
+        <a href="contact.html">Contact</a>
+        <a href="tidetracker.html">Tide Tracker</a>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════
+         HERO
+         ═══════════════════════════════════════ -->
+    <section class="hero about-hero">
+      <div class="hero-overlay"></div>
+
+      <div class="about-hero-content">
+        <h1>Madi McKay</h1>
+        <p>Marine Biologist &nbsp;·&nbsp; Science Communicator &nbsp;·&nbsp; Storyteller</p>
+      </div>
+
+      <div class="hero-wave" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+          <path d="M0 48 C240 8 480 72 720 36 C960 0 1200 56 1440 28 L1440 72 L0 72 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         INTRO (blue — reuses about-strip)
+         ═══════════════════════════════════════ -->
+    <section class="about-strip">
+
+      <div class="fish-school fish-school--a" aria-hidden="true">
+        <div class="school-cluster">
+          <img src="Assets/Cyanotype Fish PNG Flip.png" class="school-fish sf-1">
+          <img src="Assets/Cyanotype Fish PNG Flip.png" class="school-fish sf-2">
+          <img src="Assets/Cyanotype Fish PNG Flip.png" class="school-fish sf-3">
+        </div>
+      </div>
+      <div class="fish-school fish-school--c" aria-hidden="true">
+        <div class="school-cluster">
+          <img src="Assets/Cyanotype Fish PNG Flip.png" class="school-fish sf-1">
+          <img src="Assets/Cyanotype Fish PNG Flip.png" class="school-fish sf-2">
+        </div>
+      </div>
+
+      <div class="about-inner">
+        <div class="about-image">
+          <img src="Assets/Headshots/McKay_headshot.jpg" alt="Madi McKay" class="about-photo">
+        </div>
+        <div class="about-text">
+          <h2>Madi McKay</h2>
+          <p class="about-subtitle">Marine Biologist · Science Communicator · Tidepool Extraordinaire</p>
+          <p>Madi McKay is a marine biologist and science communicator combining art, science, and story to connect people with the marine environment. Based in Monterey, California, she has built a community of over one million curious learners and ocean stewards — and she's just getting started.</p>
+          <a href="contact.html" class="btn">Get in Touch</a>
+        </div>
+      </div>
+
+      <div class="fish-school fish-school--a2" aria-hidden="true">
+        <div class="school-cluster">
+          <img src="Assets/Cyanotype Fish PNG.png" class="school-fish sf-1">
+          <img src="Assets/Cyanotype Fish PNG.png" class="school-fish sf-2">
+          <img src="Assets/Cyanotype Fish PNG.png" class="school-fish sf-3">
+        </div>
+      </div>
+      <div class="fish-school fish-school--d2" aria-hidden="true">
+        <div class="school-cluster">
+          <img src="Assets/Cyanotype Fish PNG.png" class="school-fish sf-1">
+          <img src="Assets/Cyanotype Fish PNG.png" class="school-fish sf-2">
+          <img src="Assets/Cyanotype Fish PNG.png" class="school-fish sf-3">
+          <img src="Assets/Cyanotype Fish PNG.png" class="school-fish sf-4">
+        </div>
+      </div>
+
+      <div class="about-wave" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+          <path d="M0 28 C320 72 640 0 960 52 C1120 72 1300 18 1440 44 L1440 72 L0 72 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         RESEARCH (cream)
+         ═══════════════════════════════════════ -->
+    <section class="bio-section bio-cream">
+      <div class="bio-split">
+
+        <div>
+          <p class="bio-label">Research</p>
+          <h2 class="bio-heading">Kelp &amp; Conservation</h2>
+          <p class="bio-body">Madi is currently pursuing her master's degree at Moss Landing Marine Labs, where she uses drones to map and monitor bull kelp forests in Northern California. Alongside her thesis, she is actively involved in kelp restoration — using aquaculture to grow kelp for outplanting efforts to help recover one of the ocean's most vital ecosystems.</p>
+        </div>
+
+        <div class="bio-img-wrap">
+          <img src="Assets/Headshots/kelp.jpg" alt="Madi in a kelp forest" class="bio-img">
+        </div>
+
+      </div>
+
+      <div class="wave-to-blue" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+          <path d="M0 36 C180 0 360 72 540 44 C720 16 900 68 1080 32 C1260 0 1380 48 1440 36 L1440 72 L0 72 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         STORYTELLER (blue)
+         ═══════════════════════════════════════ -->
+    <section class="bio-section bio-blue">
+      <div class="bio-split bio-split--reverse">
+
+        <div class="bio-img-wrap bio-img-wrap--rounded">
+          <img src="Assets/Headshots/BWTidepool.jpg" alt="Madi at the tidepool" class="bio-img">
+        </div>
+
+        <div>
+          <p class="bio-label">Community</p>
+          <h2 class="bio-heading">1M+ Ocean Stewards</h2>
+          <p class="bio-body">Madi is passionate about making conservation and restoration topics fun and easy to understand. Through educational videos across TikTok, Instagram, and YouTube, she has grown a community of over one million curious learners — people who now care deeply about the health of our oceans.</p>
+
+          <div class="stat-strip">
+            <div class="stat-item">
+              <span class="stat-number">1M+</span>
+              <span class="stat-label">Followers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">3</span>
+              <span class="stat-label">Platforms</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">∞</span>
+              <span class="stat-label">Curiosity</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="about-wave" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+          <path d="M0 28 C320 72 640 0 960 52 C1120 72 1300 18 1440 44 L1440 72 L0 72 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         FIELD ADVENTURES (cream)
+         ═══════════════════════════════════════ -->
+    <section class="bio-section bio-cream">
+      <div class="bio-split">
+
+        <div>
+          <p class="bio-label">Field Work</p>
+          <h2 class="bio-heading">From Antarctica to the Gulf of California</h2>
+          <p class="bio-body">Madi's work has taken her across the globe. In Antarctica, she assisted Nat Geo storyteller Ami Vitale, documenting one of the world's most remote ecosystems. In the Gulf of California, she sailed aboard the historic Western Flyer — the very vessel John Steinbeck and Ed Ricketts made famous — to document its return and the science being conducted on board.</p>
+        </div>
+
+        <div class="bio-img-wrap bio-img-wrap--rounded">
+          <img src="Assets/Sea-Slug-1.JPG" alt="Sea slug underwater" class="bio-img" style="object-position: center;">
+        </div>
+
+      </div>
+
+      <div class="wave-to-blue" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+          <path d="M0 44 C240 72 480 8 720 48 C960 88 1200 12 1440 44 L1440 72 L0 72 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         WHAT'S NEXT (blue, centered closing)
+         ═══════════════════════════════════════ -->
+    <section class="bio-section bio-blue bio-closing">
+      <p class="bio-label">Looking Forward</p>
+      <h2 class="bio-heading">What's Next</h2>
+      <p class="bio-body">Madi is considering pursuing a PhD or continuing to work hands-on in the restoration of threatened species. Whichever path she takes, one thing is certain — she'll be bringing the ocean to you every step of the way.</p>
+      <a href="contact.html" class="btn">Work with Madi</a>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-logo">Nudibranch Nerd</p>
+      <div class="footer-right">
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <p class="footer-email"><a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Nudibranch Nerd</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── PAGE LAYOUT ───────────────────────── */
+    .contact-page {
+      min-height: calc(100vh - var(--header-h));
+      padding-top: var(--header-h);
+    }
+
+    /* ── HERO STRIP ────────────────────────── */
+    .contact-hero {
+      padding: 6rem 10% 5rem;
+      background: var(--color-bg);
+      position: relative;
+    }
+
+    .contact-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 6vw, 5rem);
+      color: var(--color-accent);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .contact-hero p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .contact-hero-wave {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      line-height: 0;
+    }
+
+    .contact-hero-wave svg { display: block; width: 100%; height: 56px; }
+    .contact-hero-wave path { fill: var(--color-card-bg); }
+
+    /* ── MAIN CONTENT ──────────────────────── */
+    .contact-body {
+      background: var(--color-card-bg);
+      padding: 6rem 10% 8rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    /* ── FORM ───────────────────────────────── */
+    .contact-form-wrap h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      color: var(--color-bg);
+      margin-bottom: 2rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-bg);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: transparent;
+      border: 1.5px solid rgba(10, 82, 132, 0.3);
+      border-radius: 3px;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      color: var(--color-text);
+      transition: border-color 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(10, 82, 132, 0.35);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--color-bg);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230a5284' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      cursor: pointer;
+    }
+
+    .form-submit {
+      align-self: flex-start;
+      background: var(--color-bg);
+      color: var(--color-accent);
+      border: 1.5px solid var(--color-bg);
+      padding: 0.75rem 2.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .form-submit:hover {
+      background: transparent;
+      color: var(--color-bg);
+    }
+
+    /* ── SIDEBAR ────────────────────────────── */
+    .contact-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      padding-top: 0.5rem;
+    }
+
+    .contact-sidebar h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      color: var(--color-bg);
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-method {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .contact-method .method-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-subtle);
+    }
+
+    .contact-method a,
+    .contact-method span {
+      font-size: 1rem;
+      color: var(--color-bg);
+      transition: opacity 0.15s;
+    }
+
+    .contact-method a:hover { opacity: 0.6; }
+
+    .contact-divider {
+      width: 40px;
+      height: 1.5px;
+      background: var(--color-border);
+    }
+
+    .inquiry-types {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .inquiry-type {
+      font-size: 0.85rem;
+      color: #555;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .inquiry-type::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--color-subtle);
+    }
+
+    .social-row {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+    }
+
+    .social-link {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-bg);
+      border-bottom: 1px solid rgba(10,82,132,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.15s, opacity 0.15s;
+    }
+
+    .social-link:hover {
+      opacity: 0.6;
+      border-color: transparent;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .contact-hero { padding: 5rem var(--pad-x) 4rem; }
+      .contact-body { padding: 5rem var(--pad-x) 6rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="site-logo">
+        <img src="Assets/CyanotypeTexture1.png" alt="" class="logo-img" aria-hidden="true">
+        <span class="logo-text">Nudibranch Nerd</span>
+      </a>
+      <nav class="site-nav" id="site-nav">
+        <a href="/">Home</a>
+        <a href="about.html">About</a>
+        <!-- <a href="shop.html">Shop</a> -->
+        <!-- <a href="services.html">Services</a> -->
+        <a href="contact.html">Contact</a>
+        <a href="tidetracker.html">Tide Tracker</a>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="contact-page">
+
+    <!-- HERO STRIP -->
+    <div class="contact-hero">
+      <h1>Let's Work Together</h1>
+      <p>Whether you're a brand, researcher, media outlet, or fellow ocean nerd — Madi would love to hear from you.</p>
+      <div class="contact-hero-wave" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 56" preserveAspectRatio="none">
+          <path d="M0 28 C360 56 720 0 1080 32 C1260 48 1380 12 1440 20 L1440 56 L0 56 Z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- FORM + SIDEBAR -->
+    <div class="contact-body">
+      <div class="contact-grid">
+
+        <!-- FORM -->
+        <div class="contact-form-wrap">
+          <h2>Send a Message</h2>
+          <form class="contact-form" action="mailto:info@nudibranchnerd.com" method="post" enctype="text/plain">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name" placeholder="Jane" required>
+              </div>
+              <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last-name" placeholder="Doe">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="org">Organization / Company</label>
+              <input type="text" id="org" name="org" placeholder="Optional">
+            </div>
+
+            <div class="form-group">
+              <label for="inquiry">Type of Inquiry</label>
+              <select id="inquiry" name="inquiry">
+                <option value="" disabled selected>Select one…</option>
+                <option value="brand">Brand Partnership / Sponsorship</option>
+                <option value="speaking">Speaking Engagement</option>
+                <option value="media">Media / Press</option>
+                <option value="education">Education / Outreach</option>
+                <option value="research">Research Collaboration</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell Madi a bit about what you have in mind…" required></textarea>
+            </div>
+
+            <button type="submit" class="form-submit">Send Message</button>
+
+          </form>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="contact-sidebar">
+
+          <div>
+            <h2>Get in Touch</h2>
+
+            <div class="contact-method">
+              <span class="method-label">Email</span>
+              <a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a>
+            </div>
+
+            <div class="contact-divider" style="margin: 1.5rem 0;"></div>
+
+            <div class="contact-method">
+              <span class="method-label">Based in</span>
+              <span>Monterey, California</span>
+            </div>
+
+            <div class="contact-divider" style="margin: 1.5rem 0;"></div>
+
+            <div class="contact-method">
+              <span class="method-label">Follow Along</span>
+            </div>
+            <div class="social-row" style="margin-top: 0.75rem;">
+              <a href="https://www.instagram.com/its_mad_science" target="_blank" rel="noopener" class="social-link">Instagram</a>
+              <a href="https://www.tiktok.com/@nudibranch_nerd" target="_blank" rel="noopener" class="social-link">TikTok</a>
+              <a href="https://www.youtube.com/@nudibranchnerd" target="_blank" rel="noopener" class="social-link">YouTube</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="contact-method">
+              <span class="method-label">Open to</span>
+            </div>
+            <div class="inquiry-types" style="margin-top: 0.75rem;">
+              <span class="inquiry-type">Brand partnerships &amp; sponsorships</span>
+              <span class="inquiry-type">Speaking &amp; educational engagements</span>
+              <span class="inquiry-type">Media &amp; press collaborations</span>
+              <span class="inquiry-type">Research &amp; conservation projects</span>
+              <span class="inquiry-type">Content creation &amp; storytelling</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-logo">Nudibranch Nerd</p>
+      <div class="footer-right">
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <p class="footer-email"><a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
