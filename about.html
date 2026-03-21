@@ -13,6 +13,29 @@
     /* ── ABOUT HERO ─────────────────────────── */
     .about-hero {
       background-image: url('Assets/Tide-Pool-Portrait.jpeg');
+      height: 50vh;
+      min-height: 260px;
+      justify-content: center;
+    }
+
+    .about-hero::before {
+      opacity: 0.35;
+    }
+
+    .about-hero::after {
+      display: none;
+    }
+
+    .about-hero-title {
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      color: #fff;
+      text-align: center;
+      letter-spacing: 0.04em;
+      padding: 0 var(--pad-x) 2.5rem;
+      line-height: 1.1;
     }
 
     .about-hero-content {
@@ -38,6 +61,11 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.85);
+    }
+
+    /* ── INTRO STRIP ────────────────────────── */
+    .about-strip {
+      padding-top: 5rem;
     }
 
     /* ── BIO SECTIONS ───────────────────────── */
@@ -214,12 +242,7 @@
          HERO
          ═══════════════════════════════════════ -->
     <section class="hero about-hero">
-      <div class="hero-overlay"></div>
-
-      <div class="about-hero-content">
-        <h1>Madi McKay</h1>
-        <p>Marine Biologist &nbsp;·&nbsp; Science Communicator &nbsp;·&nbsp; Storyteller</p>
-      </div>
+      <h1 class="about-hero-title">I'm just a Nudibranch Nerd</h1>
 
       <div class="hero-wave" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">

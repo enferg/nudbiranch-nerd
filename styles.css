@@ -197,7 +197,7 @@ a {
   display: block;
   width: 100%;
   height: 1.5px;
-  background: var(--color-text);
+  background: var(--color-accent);
   transition: transform 0.25s, opacity 0.25s;
 }
 
@@ -492,6 +492,7 @@ a {
 .about-strip {
   position: relative;
   padding: 11rem 10% 13rem;
+  overflow-x: clip;
 }
 
 /* Fish schools — swim left to right along top divider */
@@ -968,12 +969,21 @@ a {
   .site-nav {
     display: none;
     position: fixed;
-    inset: var(--header-h) 0 0 0;
-    background: var(--color-bg);
+    top: var(--header-h);
+    right: 1rem;
+    left: auto;
+    width: fit-content;
+    background: rgba(10, 82, 132, 0.92);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
     flex-direction: column;
-    justify-content: center;
-    gap: 2.5rem;
+    align-items: center;
+    gap: 0;
+    padding: 0.5rem 0;
     z-index: 99;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
 
   .site-nav.open {
@@ -981,8 +991,19 @@ a {
   }
 
   .site-nav a {
-    font-size: 1.1rem;
-    color: var(--color-text);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    width: 100%;
+    text-align: center;
+    padding: 0.85rem 1.5rem;
+  }
+
+  .site-nav a:hover {
+    background: rgba(148, 210, 255, 0.1);
+  }
+
+  .site-nav a::after {
+    display: none;
   }
 
   .menu-toggle {

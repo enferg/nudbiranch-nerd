@@ -333,7 +333,7 @@
     /* ---- Stat cards ---- */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-bottom: 2rem;
     }
@@ -987,28 +987,23 @@
           <span class="station-meta" id="station-meta">NOAA CO-OPS · Datum: MLLW · Local Time</span>
         </div>
 
-        <!-- 4 stat cards -->
+        <!-- 3 stat cards -->
         <div class="stats-grid">
           <div class="stat-card" style="--card-accent: var(--color-accent-bold)">
-            <span class="stat-label">Next Best Low</span>
+            <span class="stat-label">Next Best Low · 24 hrs</span>
             <span class="stat-value" id="stat-next-time">—</span>
             <span class="stat-sub" id="stat-next-date">—</span>
             <span id="stat-next-badge" class="stat-badge"></span>
           </div>
           <div class="stat-card" style="--card-accent: #50E3C2">
-            <span class="stat-label">Best Low This Period</span>
+            <span class="stat-label" id="stat-best-period-label">Best Low This Period</span>
             <span class="stat-value" id="stat-week-low">—</span>
             <span class="stat-sub" id="stat-week-low-when">—</span>
           </div>
           <div class="stat-card" style="--card-accent: #50E3C2">
-            <span class="stat-label" id="stat-good-label">Good+ Lows</span>
+            <span class="stat-label" id="stat-good-label">Good Lows</span>
             <span class="stat-value" id="stat-good-count">—</span>
             <span class="stat-sub" id="stat-good-sub">this period</span>
-          </div>
-          <div class="stat-card" style="--card-accent: var(--color-accent-bold)">
-            <span class="stat-label">Exceptional Lows</span>
-            <span class="stat-value" id="stat-exceptional-count">—</span>
-            <span class="stat-sub" id="stat-exceptional-sub">this period</span>
           </div>
         </div>
 
@@ -1705,10 +1700,14 @@
         `${stationLabel} (ID: ${station.id})`;
       document.getElementById('region-badge').textContent = thresholds.regionName || 'General';
 
-      // ── Stat 1: Next best low — the single lowest future low in the period
-      const futureLows = lows.filter(l => new Date(l.t.replace(' ', 'T')) > now);
-      const nextBest   = futureLows.length
-        ? futureLows.reduce((m, l) => parseFloat(l.v) < parseFloat(m.v) ? l : m)
+      // ── Stat 1: Next low tide within 24 hours (any quality, soonest by time)
+      const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+      const next24Lows = lows.filter(l => {
+        const t = new Date(l.t.replace(' ', 'T'));
+        return t > now && t <= in24h;
+      });
+      const nextBest = next24Lows.length
+        ? next24Lows.reduce((m, l) => new Date(l.t.replace(' ', 'T')) < new Date(m.t.replace(' ', 'T')) ? l : m)
         : null;
       if (nextBest) {
         document.getElementById('stat-next-time').textContent = formatTime(nextBest.t);
@@ -1720,7 +1719,7 @@
         badge.className = `stat-badge ${qualityBadgeClass(q)}`;
       } else {
         document.getElementById('stat-next-time').textContent = 'None';
-        document.getElementById('stat-next-date').textContent = 'in this range';
+        document.getElementById('stat-next-date').textContent = 'in next 24 hrs';
         document.getElementById('stat-next-badge').textContent = '';
       }
 
@@ -1734,16 +1733,14 @@
           formatDate(lowest.t) + ' · ' + formatTime(lowest.t);
       }
 
-      // ── Stat 3: Good+ count
+      // ── Stat 2: Best low period label
+      document.getElementById('stat-best-period-label').textContent = `Best Low · ${rangeLabel()}`;
+
+      // ── Stat 3: Good lows count
       const goodPlus = lows.filter(l => tideQuality(parseFloat(l.v), thresholds) !== 'Moderate');
       document.getElementById('stat-good-count').textContent = goodPlus.length;
-      document.getElementById('stat-good-label').textContent = 'Good+ Lows';
+      document.getElementById('stat-good-label').textContent = 'Good Lows';
       document.getElementById('stat-good-sub').textContent = rangeLabel().toLowerCase() + ' range';
-
-      // ── Stat 4: Exceptional count
-      const exceptional = lows.filter(l => tideQuality(parseFloat(l.v), thresholds) === 'Exceptional');
-      document.getElementById('stat-exceptional-count').textContent = exceptional.length;
-      document.getElementById('stat-exceptional-sub').textContent = rangeLabel().toLowerCase() + ' range';
 
       // ── Chart
       renderChart(hourly, hiLo, thresholds);
