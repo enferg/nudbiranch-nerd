@@ -19,6 +19,14 @@ const STATIONS = [
   { id: '9410660', region: 'socal',      name: 'Los Angeles, CA' },
 ];
 
+// Manual overrides applied after threshold computation.
+// Use these when a region's real-world feel warrants a fixed threshold
+// regardless of what the percentile math produces.
+const THRESHOLD_OVERRIDES = {
+  norcal: { good: 0.0 },
+  socal:  { good: 0.0 },
+};
+
 // Geographic bounding boxes for region matching (checked in order)
 const REGION_BOUNDS = {
   alaska:     { latMin: 54,  latMax: 90,  lonMin: -180, lonMax: -100 },
@@ -117,11 +125,16 @@ async function main() {
       console.warn(`  Warning: no thresholds for region "${id}", skipping`);
       return null;
     }
+    const overrides = THRESHOLD_OVERRIDES[id] || {};
     return {
       id,
       name: REGION_NAMES[id],
       ...bounds,
-      thresholds: { exceptional: t.exceptional, great: t.great, good: t.good },
+      thresholds: {
+        exceptional: overrides.exceptional ?? t.exceptional,
+        great:       overrides.great       ?? t.great,
+        good:        overrides.good        ?? t.good,
+      },
     };
   }).filter(Boolean);
 

@@ -69,7 +69,7 @@ const TIDE_REGIONS = [
     "thresholds": {
       "exceptional": -1.69,
       "great": -1,
-      "good": -0.5
+      "good": 0
     }
   },
   {
@@ -82,7 +82,7 @@ const TIDE_REGIONS = [
     "thresholds": {
       "exceptional": -1.71,
       "great": -1.51,
-      "good": -0.82
+      "good": 0
     }
   }
 ];

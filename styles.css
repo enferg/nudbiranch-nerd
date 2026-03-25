@@ -1104,6 +1104,9 @@ a {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
+  .collabs .section-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
 }
 
 .collab-marquee {

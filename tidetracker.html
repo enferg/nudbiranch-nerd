@@ -10,6 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
 
   <style>
     /* ==========================================
@@ -131,6 +133,47 @@
     #search-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+    /* ---- Autocomplete dropdown ---- */
+    .tide-search-autocomplete-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    #autocomplete-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #0e1a26;
+      border: 1.5px solid var(--color-accent);
+      border-radius: 3px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    #autocomplete-list li {
+      padding: 0.65rem 1.1rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.85);
+      cursor: pointer;
+      border-bottom: 1px solid rgba(148,210,255,0.1);
+      line-height: 1.3;
+    }
+
+    #autocomplete-list li:last-child {
+      border-bottom: none;
+    }
+
+    #autocomplete-list li:hover,
+    #autocomplete-list li.active {
+      background: rgba(148,210,255,0.12);
+      color: #fff;
     }
 
     #locate-btn {
@@ -500,6 +543,27 @@
     .chart-wrap {
       position: relative;
       height: 280px;
+    }
+
+    #reset-zoom-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(148,210,255,0.12);
+      border: 1px solid rgba(148,210,255,0.3);
+      border-radius: 3px;
+      color: rgba(148,210,255,0.8);
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      cursor: pointer;
+      display: none;
+    }
+
+    #reset-zoom-btn.visible {
+      display: block;
     }
 
     @media (max-width: 600px) {
@@ -930,15 +994,20 @@
       <p class="tide-hero-sub">Find the best low tides for tide pooling near any US coast</p>
 
       <div class="tide-search-wrap">
-        <div class="tide-search-row">
-          <input
-            type="text"
-            id="location-input"
-            placeholder="City, beach, or zip code…"
-            aria-label="Location search"
-            autocomplete="off"
-          />
-          <button id="search-btn" type="button">Search</button>
+        <div class="tide-search-autocomplete-wrap">
+          <div class="tide-search-row">
+            <input
+              type="text"
+              id="location-input"
+              placeholder="City, beach, or zip code…"
+              aria-label="Location search"
+              autocomplete="off"
+              aria-autocomplete="list"
+              aria-controls="autocomplete-list"
+            />
+            <button id="search-btn" type="button">Search</button>
+          </div>
+          <ul id="autocomplete-list" role="listbox" hidden></ul>
         </div>
 
         <button id="locate-btn" type="button">
@@ -1032,6 +1101,7 @@
           </div>
           <div class="chart-wrap">
             <canvas id="tide-chart" aria-label="Tide chart"></canvas>
+            <button id="reset-zoom-btn" type="button">Reset zoom</button>
           </div>
         </div>
 
@@ -1200,6 +1270,7 @@
     // ---- Quality classification ----
 
     function tideQuality(heightFt, thresholds) {
+      if (heightFt > 2) return 'Moderate';
       if (heightFt <= thresholds.exceptional) return 'Exceptional';
       if (heightFt <= thresholds.great)       return 'Great';
       if (heightFt <= thresholds.good)        return 'Good';
@@ -1324,6 +1395,14 @@
       return { station: best, distKm: bestDist };
     }
 
+    async function nearestStationsSorted(lat, lon) {
+      const stations = await fetchStations();
+      return stations
+        .map(s => ({ station: s, distKm: haversine(lat, lon, s.lat, s.lng) }))
+        .filter(e => e.distKm <= MAX_DIST_KM)
+        .sort((a, b) => a.distKm - b.distKm);
+    }
+
     // ---- Geocoding ----
 
     async function geocode(query) {
@@ -1387,12 +1466,22 @@
       const labels  = hourly.map(p => p.t);
       const heights = hourly.map(p => parseFloat(p.v));
 
-      // Low tide marker positions
-      const lowTimes = new Set(hiLo.filter(p => p.type === 'L').map(l => l.t));
-      const pointRadius = hourly.map(p => lowTimes.has(p.t) ? 5 : 0);
-      const pointBg     = hourly.map(p => {
-        if (!lowTimes.has(p.t)) return 'transparent';
-        const q = tideQuality(parseFloat(p.v), thresholds);
+      // Low tide marker positions — match each hilo low to the nearest hourly index
+      const lowIndices = new Set();
+      hiLo.filter(p => p.type === 'L' && parseFloat(p.v) <= 2).forEach(low => {
+        const lowMs = new Date(low.t).getTime();
+        let bestIdx = 0, bestDiff = Infinity;
+        labels.forEach((t, i) => {
+          const diff = Math.abs(new Date(t).getTime() - lowMs);
+          if (diff < bestDiff) { bestDiff = diff; bestIdx = i; }
+        });
+        lowIndices.add(bestIdx);
+      });
+
+      const pointRadius = heights.map((_, i) => lowIndices.has(i) ? 5 : 0);
+      const pointBg     = heights.map((h, i) => {
+        if (!lowIndices.has(i)) return 'transparent';
+        const q = tideQuality(h, thresholds);
         if (q === 'Exceptional') return '#FFBA0D';
         if (q === 'Great')       return '#FF8C42';
         if (q === 'Good')        return '#50E3C2';
@@ -1433,8 +1522,9 @@
             pointBackgroundColor: pointBg,
             pointBorderColor: pointBg,
             pointBorderWidth: 2,
-            pointHoverRadius: hourly.map(p => lowTimes.has(p.t) ? 8 : 3),
+            pointHoverRadius: heights.map((_, i) => lowIndices.has(i) ? 8 : 0),
             pointHoverBackgroundColor: '#FFBA0D',
+            pointHitRadius: heights.map((_, i) => lowIndices.has(i) ? 24 : 0),
             segment: {
               borderColor(ctx) {
                 const minY = Math.min(ctx.p0.parsed.y, ctx.p1.parsed.y);
@@ -1450,9 +1540,20 @@
           responsive: true,
           maintainAspectRatio: false,
           animation: { duration: 600 },
-          interaction: { mode: 'index', intersect: false },
+          interaction: { mode: 'nearest', intersect: true },
           plugins: {
             legend: { display: false },
+            zoom: {
+              pan:  { enabled: true, mode: 'x' },
+              zoom: {
+                wheel:  { enabled: true },
+                pinch:  { enabled: true },
+                mode: 'x',
+                onZoom() {
+                  document.getElementById('reset-zoom-btn').classList.add('visible');
+                },
+              },
+            },
             tooltip: {
               backgroundColor: 'rgba(10, 30, 60, 0.92)',
               borderColor: 'rgba(148, 210, 255, 0.3)',
@@ -1470,10 +1571,7 @@
                 label(item) {
                   const val = item.raw.toFixed(2);
                   const q = tideQuality(item.raw, thresholds);
-                  const isLow = lowTimes.has(item.label);
-                  return isLow
-                    ? `Low tide: ${val} ft  (${q})`
-                    : `Height: ${val} ft`;
+                  return `Low tide: ${val} ft  (${q})`;
                 }
               }
             },
@@ -1795,15 +1893,43 @@
       setLoading(true);
       try {
         setStatus('<span class="spinner" aria-hidden="true"></span>Finding nearest NOAA station…');
-        const { station, distKm } = await nearestStation(lat, lon);
+        const candidates = await nearestStationsSorted(lat, lon);
 
-        if (!station) throw new Error('No NOAA tide stations found. Please try a US coastal location.');
-        if (distKm > MAX_DIST_KM) {
+        if (!candidates.length) {
+          const { station: nearest } = await nearestStation(lat, lon);
+          const coastName = nearest
+            ? `${nearest.name.charAt(0) + nearest.name.slice(1).toLowerCase()}${nearest.state ? ', ' + nearest.state : ''}`
+            : 'the nearest coast';
           throw new Error(
-            `The nearest NOAA station is ${Math.round(distKm)} km away. ` +
-            `This tool covers US coastal waters — please try a location near the ocean.`
+            `Ready for a trip to the tide pools?! Your closest coastline is: ${coastName}. Hope to see you in the tide pools!`
           );
         }
+
+        const days      = rangeToDays();
+        const startDate = rangeStartDate();
+        let loaded = null;
+
+        for (const { station, distKm } of candidates) {
+          setStatus(`<span class="spinner" aria-hidden="true"></span>Loading tide data from ${station.name}…`);
+          try {
+            const [hourly, hiLo] = await Promise.all([
+              fetchHourlyCached(station.id, days, startDate),
+              fetchHiLoCached(station.id, days, startDate),
+            ]);
+            if (hourly.length && hiLo.length) {
+              loaded = { station, distKm, hourly, hiLo };
+              break;
+            }
+          } catch {
+            // this station has no forecast data — try the next closest
+          }
+        }
+
+        if (!loaded) {
+          throw new Error('No tide forecast data found near this location. Try a different coastal area.');
+        }
+
+        const { station, hourly, hiLo } = loaded;
 
         currentStation    = station;
         currentStationLat = station.lat;
@@ -1811,24 +1937,9 @@
         currentThresholds = getRegionThresholds(station.lat, station.lng);
         tableFilter       = 'good';
 
-        // Reset filter buttons to default
         ['good', 'great', 'exceptional'].forEach(f => {
           document.getElementById(`filter-${f}`).classList.toggle('active', f === 'good');
         });
-
-        setStatus(`<span class="spinner" aria-hidden="true"></span>Loading tide data from ${station.name}…`);
-
-        const days      = rangeToDays();
-        const startDate = rangeStartDate();
-
-        const [hourly, hiLo] = await Promise.all([
-          fetchHourlyCached(station.id, days, startDate),
-          fetchHiLoCached(station.id, days, startDate),
-        ]);
-
-        if (!hourly.length || !hiLo.length) {
-          throw new Error(`No tide predictions available for ${station.name}. Try a different location.`);
-        }
 
         populateUI(station, hourly, hiLo, currentThresholds);
 
@@ -1869,6 +1980,13 @@
 
     // ---- Event listeners ----
 
+    document.getElementById('reset-zoom-btn').addEventListener('click', () => {
+      if (tideChart) {
+        tideChart.resetZoom();
+        document.getElementById('reset-zoom-btn').classList.remove('visible');
+      }
+    });
+
     searchBtn.addEventListener('click', async () => {
       const query = locationInput.value.trim();
       if (!query) {
@@ -1888,8 +2006,116 @@
       }
     });
 
+    // ---- Autocomplete ----
+
+    const autocompleteList = document.getElementById('autocomplete-list');
+    let acResults = [];
+    let acIndex = -1;
+    let acDebounce = null;
+
+    function acShow(items) {
+      acResults = items;
+      acIndex = -1;
+      autocompleteList.innerHTML = '';
+      if (!items.length) { autocompleteList.hidden = true; return; }
+      items.forEach((item, i) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.textContent = item.display;
+        li.addEventListener('mousedown', e => {
+          e.preventDefault();
+          acSelect(i);
+        });
+        autocompleteList.appendChild(li);
+      });
+      autocompleteList.hidden = false;
+    }
+
+    function acClose() {
+      autocompleteList.hidden = true;
+      acResults = [];
+      acIndex = -1;
+    }
+
+    function acHighlight(idx) {
+      const items = autocompleteList.querySelectorAll('li');
+      items.forEach((li, i) => li.classList.toggle('active', i === idx));
+      acIndex = idx;
+    }
+
+    function acSelect(idx) {
+      const item = acResults[idx];
+      if (!item) return;
+      locationInput.value = item.display;
+      acClose();
+      setLoading(true);
+      runSearch(item.lat, item.lon, item.display).catch(err => {
+        setStatus(err.message || 'Search failed.', true);
+        hideResults();
+        setLoading(false);
+      });
+    }
+
+    // Pre-fetch stations as soon as the page loads so autocomplete is instant
+    const stationsReady = fetchStations().catch(() => []);
+
+    function toTitleCase(str) {
+      return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function acFilterStations(q, stations) {
+      const term = q.toLowerCase();
+      const startsWith = [], contains = [];
+      for (const s of stations) {
+        const name  = s.name.toLowerCase();
+        const state = s.state.toLowerCase();
+        if (name.startsWith(term) || state.startsWith(term)) startsWith.push(s);
+        else if (name.includes(term) || state.includes(term))  contains.push(s);
+        if (startsWith.length + contains.length >= 8) break;
+      }
+      return [...startsWith, ...contains].slice(0, 8).map(s => ({
+        display: toTitleCase(s.name) + (s.state ? `, ${s.state}` : ''),
+        lat: s.lat,
+        lon: s.lng,
+      }));
+    }
+
+    locationInput.addEventListener('input', async () => {
+      const q = locationInput.value.trim();
+      if (q.length < 2) { acClose(); return; }
+      const stations = await stationsReady;
+      acShow(acFilterStations(q, stations));
+    });
+
     locationInput.addEventListener('keydown', e => {
+      if (!autocompleteList.hidden) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          acHighlight(Math.min(acIndex + 1, acResults.length - 1));
+          return;
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          acHighlight(Math.max(acIndex - 1, 0));
+          return;
+        }
+        if (e.key === 'Enter' && acIndex >= 0) {
+          e.preventDefault();
+          acSelect(acIndex);
+          return;
+        }
+        if (e.key === 'Escape') {
+          acClose();
+          return;
+        }
+      }
       if (e.key === 'Enter') searchBtn.click();
+    });
+
+    document.addEventListener('click', e => {
+      if (!locationInput.contains(e.target) && !autocompleteList.contains(e.target)) {
+        acClose();
+      }
     });
 
     locateBtn.addEventListener('click', () => {
