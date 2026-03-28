@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tidepool Confessions — Nudibranch Nerd</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+
+    .confessions-page {
+      min-height: 100vh;
+      background: var(--color-bg);
+      padding-top: var(--header-h);
+    }
+
+    /* ── HERO ───────────────────────────────── */
+    .confessions-hero {
+      padding: 5rem 10% 4rem;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .confessions-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(148,210,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .confessions-hero-label {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-accent-bold);
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .confessions-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.04em;
+    }
+
+    .confessions-hero-sub {
+      font-size: 1rem;
+      color: rgba(148,210,255,0.7);
+      max-width: 520px;
+      margin: 0 auto 0.75rem;
+      line-height: 1.7;
+    }
+
+    .confessions-rules {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin: 1.5rem auto 0;
+      background: rgba(148,210,255,0.06);
+      border: 1px solid rgba(148,210,255,0.15);
+      border-radius: 4px;
+      padding: 1rem 1.75rem;
+      text-align: left;
+    }
+
+    .confessions-rules span {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    .confessions-rules span::before {
+      content: '🐚  ';
+    }
+
+    /* wave divider */
+    .confessions-wave {
+      line-height: 0;
+    }
+    .confessions-wave svg { display: block; width: 100%; height: 56px; }
+    .confessions-wave path { fill: var(--color-card-bg); }
+
+    /* ── FORM SECTION ───────────────────────── */
+    .confessions-body {
+      background: var(--color-card-bg);
+      padding: 5rem 10% 8rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .confessions-form-wrap {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .confessions-form-wrap h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      color: var(--color-bg);
+      margin-bottom: 0.5rem;
+    }
+
+    .confessions-anon-note {
+      font-size: 0.8rem;
+      color: var(--color-subtle);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .confessions-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-bg);
+    }
+
+    .form-group .label-note {
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: none;
+      color: var(--color-subtle);
+      margin-left: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: transparent;
+      border: 1.5px solid rgba(10,82,132,0.3);
+      border-radius: 3px;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      color: var(--color-text);
+      transition: border-color 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(10,82,132,0.35);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--color-bg);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 180px;
+    }
+
+    .form-submit {
+      align-self: flex-start;
+      background: var(--color-bg);
+      color: var(--color-accent);
+      border: 1.5px solid var(--color-bg);
+      padding: 0.75rem 2.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .form-submit:hover {
+      background: transparent;
+      color: var(--color-bg);
+    }
+
+    @media (max-width: 768px) {
+      .confessions-hero  { padding: 4rem var(--pad-x) 3rem; }
+      .confessions-body  { padding: 4rem var(--pad-x) 6rem; }
+      .confessions-rules { padding: 0.9rem 1.25rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="site-logo">
+        <img src="Assets/CyanotypeTexture1.png" alt="" class="logo-img" aria-hidden="true">
+        <span class="logo-text">Nudibranch Nerd</span>
+      </a>
+      <nav class="site-nav" id="site-nav">
+        <a href="/">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="tidetracker.html">Tide Tracker</a>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="confessions-page">
+
+    <!-- HERO -->
+    <div class="confessions-hero">
+      <span class="confessions-hero-label">The Confessional</span>
+      <h1>Tidepool Confessions</h1>
+      <p class="confessions-hero-sub">
+        Did you accidentally step on a sea star? Accidentally pocket a hermit crab? Scream at a wave and lose your dignity in front of a harbor seal? This is your safe space.
+      </p>
+
+      <div class="confessions-rules">
+        <span>Tidepool and tidepool-adjacent confessions only</span>
+        <span>Completely anonymous — no email, no name required</span>
+        <span>Use an alias or go full cryptid — your call</span>
+        <span>No judgment here. Only the tide judges.</span>
+      </div>
+    </div>
+
+    <!-- WAVE -->
+    <div class="confessions-wave" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 56" preserveAspectRatio="none">
+        <path d="M0 28 C360 56 720 0 1080 32 C1260 48 1380 12 1440 20 L1440 56 L0 56 Z"/>
+      </svg>
+    </div>
+
+    <!-- FORM -->
+    <div class="confessions-body">
+      <div class="confessions-form-wrap">
+        <h2>Make Your Confession</h2>
+        <p class="confessions-anon-note">
+          Your submission is completely anonymous. No email address is collected. No IP is stored. Just you, the sea, and your secrets.
+        </p>
+
+        <form
+          class="confessions-form"
+          name="tidepool-confessions"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          action="/confessions-thanks.html"
+        >
+          <input type="hidden" name="form-name" value="tidepool-confessions">
+          <p style="display:none;"><label>Don't fill this out: <input name="bot-field"></label></p>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="e.g. I may have disturbed a nudibranch..."
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="alias">
+              Name or Alias
+              <span class="label-note">— optional, completely anonymous</span>
+            </label>
+            <input
+              type="text"
+              id="alias"
+              name="alias"
+              placeholder="Mysterious Kelp Person, Anonymous Anemone, etc."
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="confession">Your Confession</label>
+            <textarea
+              id="confession"
+              name="confession"
+              placeholder="Unburden yourself. The tidepool has seen worse."
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="form-submit">Confess →</button>
+
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-logo">Nudibranch Nerd</p>
+      <div class="footer-right">
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <p class="footer-email"><a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
