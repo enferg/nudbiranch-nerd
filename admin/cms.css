@@ -1,0 +1,222 @@
+/* =====================================================
+   Nudibranch Nerd CMS — Admin UI Styles
+   Drop this file alongside cms.js on any future site.
+   ===================================================== */
+
+/* ---- Toolbar ---- */
+#cms-toolbar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(8, 15, 24, 0.95);
+  border: 1px solid rgba(148, 210, 255, 0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  font-family: 'Inter', sans-serif;
+  backdrop-filter: blur(8px);
+  user-select: none;
+}
+
+#cms-toolbar .cms-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(148, 210, 255, 0.5);
+  margin-right: 4px;
+}
+
+#cms-toolbar button {
+  background: transparent;
+  border: 1px solid rgba(148, 210, 255, 0.25);
+  border-radius: 3px;
+  color: rgba(148, 210, 255, 0.85);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  text-transform: uppercase;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+#cms-toolbar button:hover {
+  background: rgba(148, 210, 255, 0.12);
+  border-color: rgba(148, 210, 255, 0.5);
+  color: #fff;
+}
+
+#cms-toolbar #cms-btn-save {
+  background: #94D2FF;
+  border-color: #94D2FF;
+  color: #080f18;
+}
+
+#cms-toolbar #cms-btn-save:hover {
+  background: #fff;
+  border-color: #fff;
+  color: #080f18;
+}
+
+#cms-toolbar #cms-btn-save:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+#cms-toolbar .cms-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(148, 210, 255, 0.15);
+  margin: 0 2px;
+}
+
+#cms-status {
+  font-size: 0.68rem;
+  color: rgba(148, 210, 255, 0.6);
+  min-width: 80px;
+  text-align: right;
+}
+
+/* ---- Editable element states ---- */
+[data-cms-id][data-cms-active] {
+  outline: 2px dashed rgba(148, 210, 255, 0.45);
+  outline-offset: 3px;
+  border-radius: 2px;
+  cursor: text;
+  transition: outline-color 0.15s;
+}
+
+[data-cms-id][data-cms-active]:focus,
+[data-cms-id][data-cms-active]:hover {
+  outline-color: #94D2FF;
+}
+
+/* ---- Image editable wrapper ---- */
+.cms-img-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.cms-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 15, 24, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  border-radius: inherit;
+}
+
+.cms-img-wrap:hover .cms-img-overlay {
+  opacity: 1;
+}
+
+.cms-img-overlay span {
+  background: rgba(148, 210, 255, 0.15);
+  border: 1px solid rgba(148, 210, 255, 0.4);
+  border-radius: 3px;
+  color: #94D2FF;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  padding: 6px 14px;
+  text-transform: uppercase;
+}
+
+/* ---- HTML/embed editor modal ---- */
+#cms-html-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+#cms-html-modal .cms-modal-box {
+  background: #0d1a26;
+  border: 1px solid rgba(148, 210, 255, 0.25);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+#cms-html-modal label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 210, 255, 0.6);
+}
+
+#cms-html-modal textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(148, 210, 255, 0.2);
+  border-radius: 3px;
+  color: #fff;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.82rem;
+  min-height: 220px;
+  outline: none;
+  padding: 12px;
+  resize: vertical;
+  width: 100%;
+}
+
+#cms-html-modal textarea:focus {
+  border-color: #94D2FF;
+}
+
+#cms-html-modal .cms-modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+#cms-html-modal .cms-modal-actions button {
+  background: transparent;
+  border: 1px solid rgba(148, 210, 255, 0.3);
+  border-radius: 3px;
+  color: rgba(148, 210, 255, 0.85);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  padding: 6px 16px;
+  text-transform: uppercase;
+  transition: background 0.15s;
+}
+
+#cms-html-modal .cms-modal-actions button.primary {
+  background: #94D2FF;
+  border-color: #94D2FF;
+  color: #080f18;
+}
+
+#cms-html-modal .cms-modal-actions button:hover {
+  background: rgba(148, 210, 255, 0.12);
+}
+
+#cms-html-modal .cms-modal-actions button.primary:hover {
+  background: #fff;
+  border-color: #fff;
+}

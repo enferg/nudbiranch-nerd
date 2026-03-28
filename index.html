@@ -52,8 +52,8 @@
 
           <!-- LEFT: YouTube -->
           <div class="two-up-col">
-            <h2 class="two-up-title">Who is the Nudinerd?</h2>
-            <div class="video-embed">
+            <h2 class="two-up-title" data-cms-id="home-video-title">Who is the Nudinerd?</h2>
+            <div class="video-embed" data-cms-id="home-video-embed" data-cms-type="html">
               <iframe
                 src="https://www.youtube.com/embed/cP9qUIUkuuA?start=22&autoplay=1&mute=1"
                 title="Who is the Nudinerd?"
@@ -128,13 +128,13 @@
 
       <div class="about-inner">
         <div class="about-image">
-          <img src="Assets/Headshots/McKay_photo.jpg" alt="Madi McKay" class="about-photo">
+          <img src="Assets/Headshots/McKay_photo.jpg" alt="Madi McKay" class="about-photo" data-cms-id="home-about-photo">
         </div>
         <div class="about-text">
-          <p class="about-label">Meet Madi</p>
-          <h2>Madi McKay</h2>
-          <p class="about-subtitle">Scientist · Educator · Tidepool Extraordinaire</p>
-          <p>
+          <p class="about-label" data-cms-id="home-about-label">Meet Madi</p>
+          <h2 data-cms-id="home-about-name">Madi McKay</h2>
+          <p class="about-subtitle" data-cms-id="home-about-subtitle">Scientist · Educator · Tidepool Extraordinaire</p>
+          <p data-cms-id="home-about-bio">
             I’m a marine biologist and science communicator combining art, science, and story to connect people with the ocean. Based in Monterey, California, I’m currently pursuing my master’s at Moss Landing Marine Labs — studying kelp forests and working on restoration. I share all of it with a community of over one million curious ocean stewards.
           </p>
           <a href="about.html" class="btn">More About Me</a>
@@ -258,5 +258,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="/admin/cms.js"></script>
 </body>
 </html>
