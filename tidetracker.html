@@ -1270,7 +1270,7 @@
     // ---- Quality classification ----
 
     function tideQuality(heightFt, thresholds) {
-      if (heightFt > 2) return 'Moderate';
+      if (heightFt > 1) return 'Moderate';
       if (heightFt <= thresholds.exceptional) return 'Exceptional';
       if (heightFt <= thresholds.great)       return 'Great';
       if (heightFt <= thresholds.good)        return 'Good';
@@ -1468,7 +1468,7 @@
 
       // Low tide marker positions — match each hilo low to the nearest hourly index
       const lowIndices = new Set();
-      hiLo.filter(p => p.type === 'L' && parseFloat(p.v) <= 2).forEach(low => {
+      hiLo.filter(p => p.type === 'L' && parseFloat(p.v) <= 1).forEach(low => {
         const lowMs = new Date(low.t).getTime();
         let bestIdx = 0, bestDiff = Infinity;
         labels.forEach((t, i) => {
@@ -1798,11 +1798,11 @@
         `${stationLabel} (ID: ${station.id})`;
       document.getElementById('region-badge').textContent = thresholds.regionName || 'General';
 
-      // ── Stat 1: Next low tide within 24 hours (any quality, soonest by time)
+      // ── Stat 1: Next low tide within 24 hours at or below 1ft
       const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
       const next24Lows = lows.filter(l => {
         const t = new Date(l.t.replace(' ', 'T'));
-        return t > now && t <= in24h;
+        return t > now && t <= in24h && parseFloat(l.v) <= 1;
       });
       const nextBest = next24Lows.length
         ? next24Lows.reduce((m, l) => new Date(l.t.replace(' ', 'T')) < new Date(m.t.replace(' ', 'T')) ? l : m)
