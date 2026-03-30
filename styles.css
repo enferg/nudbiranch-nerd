@@ -1154,6 +1154,18 @@ a {
   filter: grayscale(0%) opacity(1);
 }
 
+/* ---- Barrio display font — uppercase everywhere ---- */
+.site-logo,
+.hero-title,
+.hero-tagline,
+.two-up-title,
+.about-text h2,
+.section-title,
+.shop-section-title,
+.footer-logo {
+  text-transform: uppercase;
+}
+
 @media (max-width: 600px) {
   .collab-logo {
     height: 56px;

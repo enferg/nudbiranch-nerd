@@ -30,9 +30,9 @@
 
   <main style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: calc(var(--header-h) + 4rem) var(--pad-x) 6rem; text-align: center;">
     <div>
-      <p style="font-family: var(--font-sans); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-accent-bold); margin-bottom: 1rem;">Confession Received</p>
-      <h1 style="font-family: var(--font-serif); font-size: clamp(2.5rem, 6vw, 4.5rem); color: #fff; margin-bottom: 1.25rem; letter-spacing: 0.04em;">The tide has heard you.</h1>
-      <p style="color: rgba(255,255,255,0.7); font-size: 1rem; line-height: 1.7; max-width: 460px; margin: 0 auto 2.5rem;">
+      <p data-cms-id="thanks-label" style="font-family: var(--font-sans); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-accent-bold); margin-bottom: 1rem;">Confession Received</p>
+      <h1 data-cms-id="thanks-h1" style="font-family: var(--font-serif); font-size: clamp(2.5rem, 6vw, 4.5rem); color: #fff; margin-bottom: 1.25rem; letter-spacing: 0.04em;">The tide has heard you.</h1>
+      <p data-cms-id="thanks-p" style="color: rgba(255,255,255,0.7); font-size: 1rem; line-height: 1.7; max-width: 460px; margin: 0 auto 2.5rem;">
         Your secret is safe with the sea. Now go forth and tidepool. <a href="/tidetracker.html" style="color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px;">When's Low Tide?</a>
       </p>
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
@@ -43,5 +43,6 @@
   </main>
 
   <script src="script.js"></script>
+  <script src="/admin/cms.js"></script>
 </body>
 </html>

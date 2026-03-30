@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tidepool Confessions — Nudibranch Nerd</title>
+  <title>Tidepool Confessions — NudibraNch Nerd</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -227,17 +227,17 @@
 
     <!-- HERO -->
     <div class="confessions-hero">
-      <span class="confessions-hero-label">The Confessional</span>
-      <h1>Tidepool Confessions</h1>
-      <p class="confessions-hero-sub">
+      <span class="confessions-hero-label" data-cms-id="confessions-hero-label">The Confessional</span>
+      <h1 data-cms-id="confessions-h1">Tidepool CoNfessioNs</h1>
+      <p class="confessions-hero-sub" data-cms-id="confessions-hero-sub">
         Did you accidentally step on a sea star? Accidentally pocket a hermit crab? Scream at a wave and lose your dignity in front of a harbor seal? This is your safe space.
       </p>
 
       <div class="confessions-rules">
-        <span>Tidepool and tidepool-adjacent confessions only</span>
-        <span>Completely anonymous — no email, no name required</span>
-        <span>Use an alias or go full cryptid — your call</span>
-        <span>No judgment here. Only the tide judges.</span>
+        <span data-cms-id="confessions-rule-1">Tidepool and tidepool-adjacent confessions only</span>
+        <span data-cms-id="confessions-rule-2">Completely anonymous — no email, no name required</span>
+        <span data-cms-id="confessions-rule-3">Use an alias or go full cryptid — your call</span>
+        <span data-cms-id="confessions-rule-4">No judgment here. Only the tide judges.</span>
       </div>
     </div>
 
@@ -251,8 +251,8 @@
     <!-- FORM -->
     <div class="confessions-body">
       <div class="confessions-form-wrap">
-        <h2>Make Your Confession</h2>
-        <p class="confessions-anon-note">
+        <h2 data-cms-id="confessions-form-h2">Make Your Confession</h2>
+        <p class="confessions-anon-note" data-cms-id="confessions-anon-note">
           Your submission is completely anonymous. No email address is collected. No IP is stored. Just you, the sea, and your secrets.
         </p>
 
@@ -269,7 +269,7 @@
           <p style="display:none;"><label>Don't fill this out: <input name="bot-field"></label></p>
 
           <div class="form-group">
-            <label for="confession-subject">Subject</label>
+            <label for="confession-subject" data-cms-id="confessions-label-subject">Subject</label>
             <input
               type="text"
               id="confession-subject"
@@ -281,8 +281,8 @@
 
           <div class="form-group">
             <label for="alias">
-              Name or Alias
-              <span class="label-note">— optional, completely anonymous</span>
+              <span data-cms-id="confessions-label-alias">Name or Alias</span>
+              <span class="label-note" data-cms-id="confessions-label-alias-note">— optional, completely anonymous</span>
             </label>
             <input
               type="text"
@@ -293,7 +293,7 @@
           </div>
 
           <div class="form-group">
-            <label for="confession">Your Confession</label>
+            <label for="confession" data-cms-id="confessions-label-confession">Your Confession</label>
             <textarea
               id="confession"
               name="confession"
@@ -302,7 +302,7 @@
             ></textarea>
           </div>
 
-          <button type="submit" class="form-submit">Confess →</button>
+          <button type="submit" class="form-submit" data-cms-id="confessions-submit">Confess →</button>
 
         </form>
       </div>
@@ -325,5 +325,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="/admin/cms.js"></script>
 </body>
 </html>

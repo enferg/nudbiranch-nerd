@@ -9,35 +9,172 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    .stub-page { min-height: calc(100vh - var(--header-h)); display: flex; align-items: center; justify-content: center; padding-top: var(--header-h); }
-    .stub-page .container { text-align: center; padding: 5rem var(--pad-x); }
-    .stub-page h1 { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
-    .stub-page p { color: var(--color-subtle); font-size: 1rem; }
+    .shop-page {
+      min-height: 100vh;
+      background: var(--color-bg);
+      padding-top: var(--header-h);
+    }
+
+    /* ---- Hero ---- */
+    .shop-hero {
+      padding: 2.5rem 10% 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shop-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(148,210,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .shop-hero-label {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-accent-bold);
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .shop-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .shop-hero-sub {
+      font-size: 1rem;
+      color: rgba(148,210,255,0.7);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* wave */
+    .shop-wave { line-height: 0; }
+    .shop-wave svg { display: block; width: 100%; height: 56px; }
+    .shop-wave path { fill: var(--color-card-bg); }
+
+    /* ---- Products ---- */
+    .shop-body {
+      background: var(--color-card-bg);
+      padding: 5rem 10% 8rem;
+    }
+
+    .shop-section-title {
+      font-family: 'Barrio', cursive;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: var(--color-bg);
+      margin-bottom: 2rem;
+      letter-spacing: 0.03em;
+      width: 50%;
+      text-align: center;
+    }
+
+    .shop-divider {
+      margin: 4rem 0;
+      line-height: 0;
+      color: var(--color-border);
+    }
+    .shop-divider svg {
+      display: block;
+      width: 100%;
+      height: 32px;
+      overflow: visible;
+    }
+    .shop-divider path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    /* Shopify embed containers */
+    #collection-component-1774710760233,
+    #collection-component-1774708758046 {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .shop-hero { padding: 4rem var(--pad-x) 3rem; }
+      .shop-body  { padding: 4rem var(--pad-x) 6rem; }
+    }
   </style>
 </head>
 <body>
+
   <header class="site-header">
     <div class="header-inner">
-      <a href="/" class="site-logo">Nudibranch Nerd</a>
+      <a href="/" class="site-logo">
+        <img src="Assets/CyanotypeTexture1.png" alt="" class="logo-img" aria-hidden="true">
+        <span class="logo-text">Nudibranch Nerd</span>
+      </a>
       <nav class="site-nav" id="site-nav">
         <a href="/">Home</a>
         <a href="about.html">About</a>
-        <!-- <a href="shop.html">Shop</a> -->
-        <!-- <a href="services.html">Services</a> -->
+        <a href="shop.html">Shop</a>
         <a href="contact.html">Contact</a>
+        <a href="tidetracker.html">Tide Tracker</a>
       </nav>
       <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
-  <main class="stub-page">
-    <div class="container">
-      <h1>Shop</h1>
-      <p>Coming soon.</p>
-      <a href="/" class="btn" style="margin-top:2rem">← Back to Home</a>
+
+  <main class="shop-page">
+
+    <div class="shop-hero">
+      <span class="shop-hero-label" data-cms-id="shop-hero-label">Nudibranch Nerd</span>
+      <h1 data-cms-id="shop-h1">The Art Market</h1>
+      <p class="shop-hero-sub" data-cms-id="shop-hero-sub">Wearables, art prints, and ocean-obsessed goods for the curious naturalist.</p>
     </div>
+
+    <div class="shop-wave" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 56" preserveAspectRatio="none">
+        <path d="M0 28 C360 56 720 0 1080 32 C1260 48 1380 12 1440 20 L1440 56 L0 56 Z"/>
+      </svg>
+    </div>
+
+    <div class="shop-body">
+      <div class="shop-section">
+        <h2 class="shop-section-title" data-cms-id="shop-title-featured">Featured Products</h2>
+        <div id='collection-component-1774710760233'></div>
+      </div>
+
+      <div class="shop-divider" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 32" preserveAspectRatio="none">
+          <path d="M0,18 C60,6 130,28 220,14 C310,2 370,30 480,20 C570,12 620,26 740,10 C840,0 920,28 1020,18 C1100,10 1160,24 1260,14 C1340,6 1400,20 1440,16"/>
+        </svg>
+      </div>
+
+      <div class="shop-section">
+        <h2 class="shop-section-title" data-cms-id="shop-title-hats">Hats</h2>
+        <div id='collection-component-1774710906786'></div>
+      </div>
+
+      <div class="shop-divider" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 32" preserveAspectRatio="none">
+          <path d="M0,18 C60,6 130,28 220,14 C310,2 370,30 480,20 C570,12 620,26 740,10 C840,0 920,28 1020,18 C1100,10 1160,24 1260,14 C1340,6 1400,20 1440,16"/>
+        </svg>
+      </div>
+
+      <div class="shop-section">
+        <h2 class="shop-section-title" data-cms-id="shop-title-all">All Products</h2>
+        <div id='collection-component-1774708758046'></div>
+      </div>
+    </div>
+
   </main>
+
   <footer class="site-footer">
     <div class="container footer-inner">
       <p class="footer-logo">Nudibranch Nerd</p>
@@ -45,12 +182,164 @@
         <nav class="footer-nav">
           <a href="/">Home</a>
           <a href="about.html">About</a>
+          <a href="shop.html">Shop</a>
           <a href="contact.html">Contact</a>
         </nav>
         <p class="footer-email"><a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a></p>
       </div>
     </div>
   </footer>
+
   <script src="script.js"></script>
+  <script src="/admin/cms.js"></script>
+  <script type="text/javascript">
+  /*<![CDATA[*/
+  (function () {
+    var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+    if (window.ShopifyBuy) {
+      if (window.ShopifyBuy.UI) {
+        ShopifyBuyInit();
+      } else {
+        loadScript();
+      }
+    } else {
+      loadScript();
+    }
+    function loadScript() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = scriptURL;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+      script.onload = ShopifyBuyInit;
+    }
+
+    var collectionOptions = {
+      "product": {
+        "styles": {
+          "product": {
+            "@media (min-width: 601px)": {
+              "max-width": "calc(25% - 20px)",
+              "margin-left": "20px",
+              "margin-bottom": "50px",
+              "width": "calc(25% - 20px)"
+            },
+            "img": {
+              "height": "calc(100% - 15px)",
+              "position": "absolute",
+              "left": "0",
+              "right": "0",
+              "top": "0"
+            },
+            "imgWrapper": {
+              "padding-top": "calc(75% + 15px)",
+              "position": "relative",
+              "height": "0"
+            }
+          },
+          "title": { "color": "#0a5284" },
+          "button": {
+            ":hover": { "background-color": "#14639d" },
+            "background-color": "#166eae",
+            ":focus": { "background-color": "#14639d" },
+            "border-radius": "21px",
+            "padding-left": "49px",
+            "padding-right": "49px"
+          }
+        },
+        "buttonDestination": "modal",
+        "contents": { "options": false },
+        "text": { "button": "View product" }
+      },
+      "productSet": {
+        "styles": {
+          "products": {
+            "@media (min-width: 601px)": { "margin-left": "-20px" }
+          }
+        }
+      },
+      "modalProduct": {
+        "contents": {
+          "img": false,
+          "imgWithCarousel": true,
+          "button": false,
+          "buttonWithQuantity": true
+        },
+        "styles": {
+          "product": {
+            "@media (min-width: 601px)": {
+              "max-width": "100%",
+              "margin-left": "0px",
+              "margin-bottom": "0px"
+            }
+          },
+          "button": {
+            ":hover": { "background-color": "#14639d" },
+            "background-color": "#166eae",
+            ":focus": { "background-color": "#14639d" },
+            "border-radius": "21px",
+            "padding-left": "49px",
+            "padding-right": "49px"
+          },
+          "title": {
+            "font-family": "Helvetica Neue, sans-serif",
+            "font-weight": "bold",
+            "font-size": "26px",
+            "color": "#4c4c4c"
+          }
+        },
+        "text": { "button": "Add to cart" }
+      },
+      "option": {},
+      "cart": {
+        "styles": {
+          "button": {
+            ":hover": { "background-color": "#14639d" },
+            "background-color": "#166eae",
+            ":focus": { "background-color": "#14639d" },
+            "border-radius": "21px"
+          }
+        },
+        "text": { "total": "Subtotal", "button": "Checkout" }
+      },
+      "toggle": {
+        "styles": {
+          "toggle": {
+            "background-color": "#166eae",
+            ":hover": { "background-color": "#14639d" },
+            ":focus": { "background-color": "#14639d" }
+          }
+        }
+      }
+    };
+
+    function ShopifyBuyInit() {
+      var client = ShopifyBuy.buildClient({
+        domain: 'sgbwja-s2.myshopify.com',
+        storefrontAccessToken: '8afdc1f11d9a3c12dc974bfa17a4e2fb',
+      });
+      ShopifyBuy.UI.onReady(client).then(function (ui) {
+        ui.createComponent('collection', {
+          id: '653082853662',
+          node: document.getElementById('collection-component-1774710760233'),
+          moneyFormat: '%24%7B%7Bamount%7D%7D',
+          options: collectionOptions,
+        });
+        ui.createComponent('collection', {
+          id: '653083115806',
+          node: document.getElementById('collection-component-1774710906786'),
+          moneyFormat: '%24%7B%7Bamount%7D%7D',
+          options: collectionOptions,
+        });
+        ui.createComponent('collection', {
+          id: '652921372958',
+          node: document.getElementById('collection-component-1774708758046'),
+          moneyFormat: '%24%7B%7Bamount%7D%7D',
+          options: collectionOptions,
+        });
+      });
+    }
+  })();
+  /*]]>*/
+  </script>
 </body>
 </html>

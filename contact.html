@@ -261,7 +261,7 @@
       <nav class="site-nav" id="site-nav">
         <a href="/">Home</a>
         <a href="about.html">About</a>
-        <!-- <a href="shop.html">Shop</a> -->
+        <a href="shop.html">Shop</a>
         <!-- <a href="services.html">Services</a> -->
         <a href="contact.html">Contact</a>
         <a href="tidetracker.html">Tide Tracker</a>
@@ -276,8 +276,8 @@
 
     <!-- HERO STRIP -->
     <div class="contact-hero">
-      <h1>Let's Work Together</h1>
-      <p>Whether you're a brand, researcher, media outlet, or fellow ocean nerd — Madi would love to hear from you.</p>
+      <h1 data-cms-id="contact-h1">Let's Work Together</h1>
+      <p data-cms-id="contact-hero-p">Whether you're a brand, researcher, media outlet, or fellow ocean nerd — Madi would love to hear from you.</p>
       <div class="contact-hero-wave" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 56" preserveAspectRatio="none">
           <path d="M0 28 C360 56 720 0 1080 32 C1260 48 1380 12 1440 20 L1440 56 L0 56 Z"/>
@@ -291,34 +291,34 @@
 
         <!-- FORM -->
         <div class="contact-form-wrap">
-          <h2>Send a Message</h2>
+          <h2 data-cms-id="contact-form-h2">Send a Message</h2>
           <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thanks.html">
             <input type="hidden" name="form-name" value="contact">
             <p style="display:none;"><label>Don't fill this out: <input name="bot-field"></label></p>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="first-name">First Name</label>
+                <label for="first-name" data-cms-id="contact-label-firstname">First Name</label>
                 <input type="text" id="first-name" name="first-name" placeholder="Jane" required>
               </div>
               <div class="form-group">
-                <label for="last-name">Last Name</label>
+                <label for="last-name" data-cms-id="contact-label-lastname">Last Name</label>
                 <input type="text" id="last-name" name="last-name" placeholder="Doe">
               </div>
             </div>
 
             <div class="form-group">
-              <label for="email">Email</label>
+              <label for="email" data-cms-id="contact-label-email">Email</label>
               <input type="email" id="email" name="email" placeholder="jane@example.com" required>
             </div>
 
             <div class="form-group">
-              <label for="org">Organization / Company</label>
+              <label for="org" data-cms-id="contact-label-org">Organization / Company</label>
               <input type="text" id="org" name="org" placeholder="Optional">
             </div>
 
             <div class="form-group">
-              <label for="inquiry">Type of Inquiry</label>
+              <label for="inquiry" data-cms-id="contact-label-inquiry">Type of Inquiry</label>
               <select id="inquiry" name="inquiry">
                 <option value="" disabled selected>Select one…</option>
                 <option value="brand">Brand Partnership / Sponsorship</option>
@@ -331,11 +331,11 @@
             </div>
 
             <div class="form-group">
-              <label for="message">Message</label>
+              <label for="message" data-cms-id="contact-label-message">Message</label>
               <textarea id="message" name="message" placeholder="Tell Madi a bit about what you have in mind…" required></textarea>
             </div>
 
-            <button type="submit" class="form-submit">Send Message →</button>
+            <button type="submit" class="form-submit" data-cms-id="contact-submit">Send Message →</button>
 
           </form>
         </div>
@@ -344,24 +344,24 @@
         <div class="contact-sidebar">
 
           <div>
-            <h2>Get in Touch</h2>
+            <h2 data-cms-id="contact-sidebar-h2">Get in Touch</h2>
 
             <div class="contact-method">
-              <span class="method-label">Email</span>
-              <a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a>
+              <span class="method-label" data-cms-id="contact-method-email">Email</span>
+              <a href="mailto:info@nudibranchnerd.com" data-cms-id="contact-email-address">info@nudibranchnerd.com</a>
             </div>
 
             <div class="contact-divider" style="margin: 1.5rem 0;"></div>
 
             <div class="contact-method">
-              <span class="method-label">Based in</span>
-              <span>Monterey, California</span>
+              <span class="method-label" data-cms-id="contact-method-based">Based in</span>
+              <span data-cms-id="contact-location">Monterey, California</span>
             </div>
 
             <div class="contact-divider" style="margin: 1.5rem 0;"></div>
 
             <div class="contact-method">
-              <span class="method-label">Follow Along</span>
+              <span class="method-label" data-cms-id="contact-method-follow">Follow Along</span>
             </div>
             <div class="social-row" style="margin-top: 0.75rem;">
               <a href="https://www.instagram.com/its_mad_science" target="_blank" rel="noopener" class="social-link">Instagram</a>
@@ -372,14 +372,14 @@
 
           <div>
             <div class="contact-method">
-              <span class="method-label">Open to</span>
+              <span class="method-label" data-cms-id="contact-method-open">Open to</span>
             </div>
             <div class="inquiry-types" style="margin-top: 0.75rem;">
-              <span class="inquiry-type">Brand partnerships &amp; sponsorships</span>
-              <span class="inquiry-type">Speaking &amp; educational engagements</span>
-              <span class="inquiry-type">Media &amp; press collaborations</span>
-              <span class="inquiry-type">Research &amp; conservation projects</span>
-              <span class="inquiry-type">Content creation &amp; storytelling</span>
+              <span class="inquiry-type" data-cms-id="contact-inquiry-1">Brand partnerships &amp; sponsorships</span>
+              <span class="inquiry-type" data-cms-id="contact-inquiry-2">Speaking &amp; educational engagements</span>
+              <span class="inquiry-type" data-cms-id="contact-inquiry-3">Media &amp; press collaborations</span>
+              <span class="inquiry-type" data-cms-id="contact-inquiry-4">Research &amp; conservation projects</span>
+              <span class="inquiry-type" data-cms-id="contact-inquiry-5">Content creation &amp; storytelling</span>
             </div>
           </div>
 
@@ -405,5 +405,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="/admin/cms.js"></script>
 </body>
 </html>
