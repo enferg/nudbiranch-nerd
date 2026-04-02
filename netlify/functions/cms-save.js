@@ -62,7 +62,11 @@ exports.handler = async (event) => {
   const key = page.replace(/^\//, '') || 'index';
 
   try {
-    const store = getStore('cms-content');
+    const store = getStore({
+      name: 'cms-content',
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_TOKEN,
+    });
     // Merge with existing content so a partial save doesn't wipe other fields
     const existing = await store.get(key);
     const current = existing ? JSON.parse(existing) : {};

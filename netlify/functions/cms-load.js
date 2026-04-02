@@ -17,7 +17,11 @@ exports.handler = async (event) => {
   const key = page.replace(/^\//, '') || 'index';
 
   try {
-    const store = getStore('cms-content');
+    const store = getStore({
+      name: 'cms-content',
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_TOKEN,
+    });
     const raw = await store.get(key);
     if (!raw) {
       return { statusCode: 200, headers, body: JSON.stringify({}) };
