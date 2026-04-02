@@ -64,7 +64,7 @@ exports.handler = async (event) => {
   try {
     const store = getStore({
       name: 'cms-content',
-      siteID: process.env.NETLIFY_SITE_ID,
+      siteID: process.env.NETLIFY_SITE_ID || process.env.SITE_ID,
       token: process.env.NETLIFY_TOKEN,
     });
     // Merge with existing content so a partial save doesn't wipe other fields

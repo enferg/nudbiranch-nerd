@@ -19,7 +19,7 @@ exports.handler = async (event) => {
   try {
     const store = getStore({
       name: 'cms-content',
-      siteID: process.env.NETLIFY_SITE_ID,
+      siteID: process.env.NETLIFY_SITE_ID || process.env.SITE_ID,
       token: process.env.NETLIFY_TOKEN,
     });
     const raw = await store.get(key);
