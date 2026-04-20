@@ -103,6 +103,63 @@
       width: 100%;
     }
 
+    .shop-spotlight {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .shop-spotlight-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .shop-spotlight-heading {
+      font-family: 'Barrio', cursive;
+      font-size: clamp(3rem, 6vw, 5rem);
+      text-transform: uppercase;
+      color: var(--color-bg);
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .shop-spotlight-issue {
+      font-family: var(--font-sans);
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent-bold);
+    }
+
+    .shop-spotlight-sub {
+      font-size: 1.05rem;
+      color: #555;
+      line-height: 1.7;
+      max-width: 420px;
+    }
+
+    #product-component-1776644660189 {
+      width: 100%;
+      text-align: center;
+    }
+
+    #product-component-1776644660189 > div,
+    #product-component-1776644660189 iframe {
+      margin: 0 auto;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .shop-spotlight {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 768px) {
       .shop-hero { padding: 4rem var(--pad-x) 3rem; }
       .shop-body  { padding: 4rem var(--pad-x) 6rem; }
@@ -122,6 +179,7 @@
         <a href="about.html">About</a>
         <a href="shop.html">Shop</a>
         <a href="contact.html">Contact</a>
+        <a href="zine.html">Zine</a>
         <a href="tidetracker.html">Tide Tracker</a>
       </nav>
       <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
@@ -145,6 +203,24 @@
     </div>
 
     <div class="shop-body">
+
+      <div class="shop-section shop-spotlight">
+        <div class="shop-spotlight-text">
+          <h2 class="shop-spotlight-heading" data-cms-id="shop-spotlight-heading">May 2026</h2>
+          <p class="shop-spotlight-issue" data-cms-id="shop-spotlight-issue">1st Publication</p>
+          <p class="shop-spotlight-sub" data-cms-id="shop-spotlight-sub">A mini magazine dedicated to sea slugs, tidepools, ocean wonders and marine science</p>
+      <p class="shop-spotlight-sub" data-cms-id="shop-spotlight-sub">Order by April 30th, 2026 for the first publication of Slug Life! Shipping out first week of May 2026</p>
+
+        </div>
+        <div id='product-component-1776644660189'></div>
+      </div>
+
+      <div class="shop-divider" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 32" preserveAspectRatio="none">
+          <path d="M0,18 C60,6 130,28 220,14 C310,2 370,30 480,20 C570,12 620,26 740,10 C840,0 920,28 1020,18 C1100,10 1160,24 1260,14 C1340,6 1400,20 1440,16"/>
+        </svg>
+      </div>
+
       <div class="shop-section">
         <h2 class="shop-section-title" data-cms-id="shop-title-featured">Featured Products</h2>
         <div id='collection-component-1774710760233'></div>
@@ -312,12 +388,99 @@
       }
     };
 
+    var spotlightOptions = {
+      "product": {
+        "styles": {
+          "product": {
+            "@media (min-width: 601px)": {
+              "max-width": "560px",
+              "width": "560px",
+              "margin-left": "0px",
+              "margin-bottom": "0px"
+            }
+          },
+          "title": { "color": "#0a5284", "font-size": "22px" },
+          "button": {
+            ":hover": { "background-color": "#14639d" },
+            "background-color": "#166eae",
+            ":focus": { "background-color": "#14639d" },
+            "border-radius": "21px",
+            "padding-left": "49px",
+            "padding-right": "49px"
+          },
+          "price": { "font-size": "18px" }
+        },
+        "buttonDestination": "checkout",
+        "contents": { "options": false },
+        "text": { "button": "Buy Now" }
+      },
+      "modalProduct": {
+        "contents": {
+          "img": false,
+          "imgWithCarousel": true,
+          "button": false,
+          "buttonWithQuantity": true
+        },
+        "styles": {
+          "product": {
+            "@media (min-width: 601px)": {
+              "max-width": "100%",
+              "margin-left": "0px",
+              "margin-bottom": "0px"
+            }
+          },
+          "button": {
+            ":hover": { "background-color": "#14639d" },
+            "background-color": "#166eae",
+            ":focus": { "background-color": "#14639d" },
+            "border-radius": "21px",
+            "padding-left": "49px",
+            "padding-right": "49px"
+          },
+          "title": {
+            "font-family": "Helvetica Neue, sans-serif",
+            "font-weight": "bold",
+            "font-size": "26px",
+            "color": "#4c4c4c"
+          }
+        },
+        "text": { "button": "Add to cart" }
+      },
+      "option": {},
+      "cart": {
+        "styles": {
+          "button": {
+            ":hover": { "background-color": "#14639d" },
+            "background-color": "#166eae",
+            ":focus": { "background-color": "#14639d" },
+            "border-radius": "21px"
+          }
+        },
+        "text": { "total": "Subtotal", "button": "Checkout" }
+      },
+      "toggle": {
+        "styles": {
+          "toggle": {
+            "background-color": "#166eae",
+            ":hover": { "background-color": "#14639d" },
+            ":focus": { "background-color": "#14639d" }
+          }
+        }
+      }
+    };
+
     function ShopifyBuyInit() {
       var client = ShopifyBuy.buildClient({
         domain: 'sgbwja-s2.myshopify.com',
         storefrontAccessToken: '8afdc1f11d9a3c12dc974bfa17a4e2fb',
       });
       ShopifyBuy.UI.onReady(client).then(function (ui) {
+        ui.createComponent('product', {
+          id: '10056347648286',
+          node: document.getElementById('product-component-1776644660189'),
+          moneyFormat: '%24%7B%7Bamount%7D%7D',
+          options: spotlightOptions,
+        });
         ui.createComponent('collection', {
           id: '653082853662',
           node: document.getElementById('collection-component-1774710760233'),

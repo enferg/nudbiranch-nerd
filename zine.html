@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slug Life Zine — Nudibranch Nerd</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    .zine-page {
+      min-height: 100vh;
+      background: var(--color-card-bg);
+      padding-top: var(--header-h);
+      display: flex;
+      align-items: center;
+    }
+
+    .zine-inner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 10%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .zine-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .zine-heading {
+      font-family: 'Barrio', cursive;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      text-transform: uppercase;
+      color: var(--color-bg);
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .zine-issue {
+      font-family: var(--font-sans);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #111;
+    }
+
+    .zine-sub {
+      font-size: 1.05rem;
+      color: #555;
+      line-height: 1.7;
+      max-width: 420px;
+    }
+
+    .zine-product {
+      width: 100%;
+      text-align: center;
+    }
+
+    .zine-product > div,
+    .zine-product iframe {
+      margin: 0 auto;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .zine-inner {
+        grid-template-columns: 1fr;
+        padding: 4rem var(--pad-x);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="site-logo">
+        <img src="Assets/CyanotypeTexture1.png" alt="" class="logo-img" aria-hidden="true">
+        <span class="logo-text">Nudibranch Nerd</span>
+      </a>
+      <nav class="site-nav" id="site-nav">
+        <a href="/">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="zine.html">Zine</a>
+        <a href="tidetracker.html">Tide Tracker</a>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="zine-page">
+    <div class="zine-inner">
+
+      <div class="zine-product" id='product-component-zine'></div>
+
+      <div class="zine-text">
+        <h1 class="zine-heading">May 2026</h1>
+        <p class="zine-issue">Volume 1 . Issue 1</p>
+        <p class="zine-sub">A mini magazine dedicated to sea slugs, tidepools, ocean wonders and marine science</p>
+        <p class="zine-sub">Order by April 30th, 2026 for the first publication of Slug Life! Shipping out first week of May 2026!</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-logo">Nudibranch Nerd</p>
+      <div class="footer-right">
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <p class="footer-email"><a href="mailto:info@nudibranchnerd.com">info@nudibranchnerd.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script type="text/javascript">
+  /*<![CDATA[*/
+  (function () {
+    var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+    if (window.ShopifyBuy) {
+      if (window.ShopifyBuy.UI) {
+        ShopifyBuyInit();
+      } else {
+        loadScript();
+      }
+    } else {
+      loadScript();
+    }
+    function loadScript() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = scriptURL;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+      script.onload = ShopifyBuyInit;
+    }
+    function ShopifyBuyInit() {
+      var client = ShopifyBuy.buildClient({
+        domain: 'sgbwja-s2.myshopify.com',
+        storefrontAccessToken: '8afdc1f11d9a3c12dc974bfa17a4e2fb',
+      });
+      ShopifyBuy.UI.onReady(client).then(function (ui) {
+        ui.createComponent('product', {
+          id: '10056347648286',
+          node: document.getElementById('product-component-zine'),
+          moneyFormat: '%24%7B%7Bamount%7D%7D',
+          options: {
+            "product": {
+              "styles": {
+                "product": {
+                  "@media (min-width: 601px)": {
+                    "max-width": "560px",
+                    "width": "560px",
+                    "margin-left": "0px",
+                    "margin-bottom": "0px"
+                  }
+                },
+                "title": { "color": "#0a5284", "font-size": "22px" },
+                "button": {
+                  ":hover": { "background-color": "#14639d" },
+                  "background-color": "#166eae",
+                  ":focus": { "background-color": "#14639d" },
+                  "border-radius": "21px",
+                  "padding-left": "49px",
+                  "padding-right": "49px"
+                },
+                "price": { "font-size": "18px" }
+              },
+              "buttonDestination": "checkout",
+              "contents": { "options": false },
+              "text": { "button": "Go to Checkout" }
+            },
+            "option": {},
+            "cart": {
+              "styles": {
+                "button": {
+                  ":hover": { "background-color": "#14639d" },
+                  "background-color": "#166eae",
+                  ":focus": { "background-color": "#14639d" },
+                  "border-radius": "21px"
+                }
+              },
+              "text": { "total": "Subtotal", "button": "Checkout" }
+            },
+            "toggle": {
+              "styles": {
+                "toggle": {
+                  "background-color": "#166eae",
+                  ":hover": { "background-color": "#14639d" },
+                  ":focus": { "background-color": "#14639d" }
+                }
+              }
+            }
+          },
+        });
+      });
+    }
+  })();
+  /*]]>*/
+  </script>
+</body>
+</html>
