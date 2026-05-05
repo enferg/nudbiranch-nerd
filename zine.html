@@ -63,6 +63,33 @@
       max-width: 420px;
     }
 
+    .zine-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .zine-subscribe-btn {
+      display: inline-block;
+      background-color: #166eae;
+      color: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      padding: 6px 16px;
+      border-radius: 21px;
+      text-decoration: none;
+      text-align: center;
+      transition: background-color 0.2s;
+    }
+
+    .zine-subscribe-btn:hover,
+    .zine-subscribe-btn:focus {
+      background-color: #14639d;
+    }
+
     @media (max-width: 768px) {
       .zine-inner {
         padding: 4rem var(--pad-x);
@@ -94,13 +121,16 @@
   <main class="zine-page">
     <div class="zine-inner">
 
-      <div id='product-component-1776697907654'></div>
+      <div class="zine-buttons">
+        <div id='product-component-1778010300935'></div>
+        <a href="https://nudibranch-nerd.myshopify.com/products/slug-life-monthly-june?variant=51811550855454" class="zine-subscribe-btn" target="_blank" rel="noopener">Subscribe — Delivered Monthly — $8</a>
+      </div>
 
       <div class="zine-text">
-        <h1 class="zine-heading">May 2026</h1>
-        <p class="zine-issue">Volume 1 . Issue 1</p>
+        <h1 class="zine-heading">June 2026</h1>
+        <p class="zine-issue">Volume 1 . Issue 2</p>
         <p class="zine-sub">A mini magazine dedicated to sea slugs, tidepools, ocean wonders and marine science</p>
-        <p class="zine-sub">Order by April 30th, 2026 for the first publication of Slug Life! Shipping out first week of May 2026!</p>
+        <p class="zine-sub">Order by May 31st, 2026 for the second issue of Slug Life! Shipping out first week of June 2026!</p>
 
       </div>
 
@@ -149,8 +179,8 @@
       });
       ShopifyBuy.UI.onReady(client).then(function (ui) {
         ui.createComponent('product', {
-          id: '10056347648286',
-          node: document.getElementById('product-component-1776697907654'),
+          id: '10090780033310',
+          node: document.getElementById('product-component-1778010300935'),
           moneyFormat: '%24%7B%7Bamount%7D%7D',
           options: {
             "product": {
@@ -159,7 +189,7 @@
                   "@media (min-width: 601px)": {
                     "max-width": "calc(25% - 20px)",
                     "margin-left": "20px",
-                    "margin-bottom": "50px"
+                    "margin-bottom": "4px"
                   }
                 },
                 "title": { "color": "#0a5284" },
@@ -171,7 +201,8 @@
                 }
               },
               "buttonDestination": "checkout",
-              "text": { "button": "Pre-Order" }
+              "contents": { "price": false },
+              "text": { "button": "Order June - $10" }
             },
             "productSet": {
               "styles": {
