@@ -63,12 +63,66 @@
       max-width: 420px;
     }
 
-    .zine-buttons {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
+    .zine-carousel {
+      position: relative;
+      width: 100%;
+      max-width: 380px;
+      overflow: hidden;
+      border-radius: 8px;
     }
+
+    .zine-carousel-track {
+      display: flex;
+      transition: transform 0.4s ease;
+    }
+
+    .zine-slide {
+      min-width: 100%;
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .zine-prev,
+    .zine-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .zine-prev { left: 8px; }
+    .zine-next { right: 8px; }
+    .zine-prev:hover, .zine-next:hover { background: #fff; }
+
+    .zine-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .zine-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(10,82,132,0.25);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .zine-dot.active { background: var(--color-bg); }
 
     .zine-subscribe-btn {
       display: inline-block;
@@ -121,10 +175,20 @@
   <main class="zine-page">
     <div class="zine-inner">
 
-      <div class="zine-buttons">
-        <div id='product-component-1778010300935'></div>
-        <a href="https://nudibranch-nerd.myshopify.com/products/slug-life-monthly-june?variant=51811550855454" class="zine-subscribe-btn" target="_blank" rel="noopener">Subscribe — Delivered Monthly — $8</a>
+      <div class="zine-carousel">
+        <div class="zine-carousel-track" id="zine-track">
+          <img src="zine covers/June2026Zine (1).png" alt="Slug Life June 2026" class="zine-slide">
+          <img src="zine covers/May2026Zine.png" alt="Slug Life May 2026" class="zine-slide">
+        </div>
+        <button class="zine-prev" id="zine-prev" aria-label="Previous">&#8592;</button>
+        <button class="zine-next" id="zine-next" aria-label="Next">&#8594;</button>
+        <div class="zine-dots" id="zine-dots">
+          <span class="zine-dot active"></span>
+          <span class="zine-dot"></span>
+        </div>
       </div>
+
+      <a href="https://nudibranch-nerd.myshopify.com/products/slug-life-monthly-june?variant=51811550855454" class="zine-subscribe-btn" target="_blank" rel="noopener">Order June</a>
 
       <div class="zine-text">
         <h1 class="zine-heading">June 2026</h1>
@@ -152,123 +216,21 @@
   </footer>
 
   <script src="script.js"></script>
-  <script type="text/javascript">
-  /*<![CDATA[*/
-  (function () {
-    var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-    if (window.ShopifyBuy) {
-      if (window.ShopifyBuy.UI) {
-        ShopifyBuyInit();
-      } else {
-        loadScript();
-      }
-    } else {
-      loadScript();
+  <script>
+    const track = document.getElementById('zine-track');
+    const dots = document.querySelectorAll('.zine-dot');
+    let current = 0;
+    const total = 2;
+
+    function goTo(n) {
+      current = (n + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
     }
-    function loadScript() {
-      var script = document.createElement('script');
-      script.async = true;
-      script.src = scriptURL;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-      script.onload = ShopifyBuyInit;
-    }
-    function ShopifyBuyInit() {
-      var client = ShopifyBuy.buildClient({
-        domain: 'sgbwja-s2.myshopify.com',
-        storefrontAccessToken: '8afdc1f11d9a3c12dc974bfa17a4e2fb',
-      });
-      ShopifyBuy.UI.onReady(client).then(function (ui) {
-        ui.createComponent('product', {
-          id: '10090780033310',
-          node: document.getElementById('product-component-1778010300935'),
-          moneyFormat: '%24%7B%7Bamount%7D%7D',
-          options: {
-            "product": {
-              "styles": {
-                "product": {
-                  "@media (min-width: 601px)": {
-                    "max-width": "calc(25% - 20px)",
-                    "margin-left": "20px",
-                    "margin-bottom": "4px"
-                  }
-                },
-                "title": { "color": "#0a5284" },
-                "button": {
-                  ":hover": { "background-color": "#14639d" },
-                  "background-color": "#166eae",
-                  ":focus": { "background-color": "#14639d" },
-                  "border-radius": "21px"
-                }
-              },
-              "buttonDestination": "checkout",
-              "contents": { "price": false },
-              "text": { "button": "Order June - $10" }
-            },
-            "productSet": {
-              "styles": {
-                "products": {
-                  "@media (min-width: 601px)": { "margin-left": "-20px" }
-                }
-              }
-            },
-            "modalProduct": {
-              "contents": {
-                "img": false,
-                "imgWithCarousel": true,
-                "button": false,
-                "buttonWithQuantity": true
-              },
-              "styles": {
-                "product": {
-                  "@media (min-width: 601px)": {
-                    "max-width": "100%",
-                    "margin-left": "0px",
-                    "margin-bottom": "0px"
-                  }
-                },
-                "button": {
-                  ":hover": { "background-color": "#14639d" },
-                  "background-color": "#166eae",
-                  ":focus": { "background-color": "#14639d" },
-                  "border-radius": "21px"
-                },
-                "title": {
-                  "font-family": "Helvetica Neue, sans-serif",
-                  "font-weight": "bold",
-                  "font-size": "26px",
-                  "color": "#4c4c4c"
-                }
-              },
-              "text": { "button": "Add to cart" }
-            },
-            "option": {},
-            "cart": {
-              "styles": {
-                "button": {
-                  ":hover": { "background-color": "#14639d" },
-                  "background-color": "#166eae",
-                  ":focus": { "background-color": "#14639d" },
-                  "border-radius": "21px"
-                }
-              },
-              "text": { "total": "Subtotal", "button": "Checkout" },
-              "popup": false
-            },
-            "toggle": {
-              "styles": {
-                "toggle": {
-                  "background-color": "#166eae",
-                  ":hover": { "background-color": "#14639d" },
-                  ":focus": { "background-color": "#14639d" }
-                }
-              }
-            }
-          },
-        });
-      });
-    }
-  })();
-  /*]]>*/
+
+    document.getElementById('zine-prev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('zine-next').addEventListener('click', () => goTo(current + 1));
+    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
   </script>
 </body>
 </html>
