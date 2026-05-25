@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nudibranch Nerd — Style Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cyanotype-blue:  #0a5284;
+      --light-blue:      #94D2FF;
+      --gold:            #FFBA0D;
+      --cream:           #f2efea;
+      --border:          #166eaea1;
+      --rust:            #853700;
+      --near-black:      #1a1a1a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      padding: 48px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* ---- Header ---- */
+    .sg-header {
+      border-bottom: 3px solid var(--cyanotype-blue);
+      padding-bottom: 24px;
+      margin-bottom: 48px;
+    }
+
+    .sg-header h1 {
+      font-family: 'Barrio', cursive;
+      font-size: 2.8rem;
+      color: var(--cyanotype-blue);
+      letter-spacing: 0.04em;
+    }
+
+    .sg-header p {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ---- Section ---- */
+    .sg-section {
+      margin-bottom: 48px;
+    }
+
+    .sg-section-title {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* ---- Colors ---- */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .color-chip {
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .color-swatch {
+      height: 80px;
+    }
+
+    .color-info {
+      padding: 10px 12px;
+      background: #fafafa;
+    }
+
+    .color-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #222;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .color-hex {
+      font-size: 0.72rem;
+      color: #666;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .color-var {
+      font-size: 0.65rem;
+      color: #aaa;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* ---- Typography ---- */
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      padding: 16px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .type-row:last-child { border-bottom: none; }
+
+    .type-meta {
+      width: 180px;
+      flex-shrink: 0;
+    }
+
+    .type-meta .t-name {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .type-meta .t-detail {
+      font-size: 0.66rem;
+      color: #999;
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
+    .type-sample-serif-xl  { font-family: 'Barrio', cursive; font-size: 3rem; color: var(--cyanotype-blue); line-height: 1; }
+    .type-sample-serif-lg  { font-family: 'Barrio', cursive; font-size: 2rem; color: var(--cyanotype-blue); line-height: 1; }
+    .type-sample-serif-md  { font-family: 'Barrio', cursive; font-size: 1.4rem; color: var(--cyanotype-blue); line-height: 1; }
+    .type-sample-sans-lg   { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 400; color: #1a1a1a; }
+    .type-sample-sans-md   { font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 400; color: #1a1a1a; }
+    .type-sample-sans-sm   { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #666; }
+    .type-sample-sans-xs   { font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: #999; }
+
+    /* ---- Usage notes ---- */
+    .usage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .usage-card {
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 14px 16px;
+    }
+
+    .usage-card .u-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+
+    .usage-card .u-text {
+      font-size: 0.8rem;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    /* ---- Print ---- */
+    @media print {
+      body { padding: 32px; }
+      .color-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sg-header">
+    <h1>Nudibranch Nerd</h1>
+    <p>Brand Style Guide · Colors, Typography &amp; Usage</p>
+  </div>
+
+  <!-- COLORS -->
+  <div class="sg-section">
+    <div class="sg-section-title">Color Palette</div>
+    <div class="color-grid">
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#0a5284;"></div>
+        <div class="color-info">
+          <span class="color-name">Cyanotype Blue</span>
+          <span class="color-hex">#0a5284</span>
+          <span class="color-var">--color-bg</span>
+        </div>
+      </div>
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#94D2FF;"></div>
+        <div class="color-info">
+          <span class="color-name">Light Blue</span>
+          <span class="color-hex">#94D2FF</span>
+          <span class="color-var">--color-accent</span>
+        </div>
+      </div>
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#FFBA0D;"></div>
+        <div class="color-info">
+          <span class="color-name">Cyanotype Gold</span>
+          <span class="color-hex">#FFBA0D</span>
+          <span class="color-var">--color-accent-bold</span>
+        </div>
+      </div>
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#f2efea; border-bottom: 1px solid #e8e4df;"></div>
+        <div class="color-info">
+          <span class="color-name">Cream</span>
+          <span class="color-hex">#f2efea</span>
+          <span class="color-var">--color-card-bg</span>
+        </div>
+      </div>
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#166eae;"></div>
+        <div class="color-info">
+          <span class="color-name">Mid Blue</span>
+          <span class="color-hex">#166eae</span>
+          <span class="color-var">--color-border</span>
+        </div>
+      </div>
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#853700;"></div>
+        <div class="color-info">
+          <span class="color-name">Rust</span>
+          <span class="color-hex">#853700</span>
+          <span class="color-var">--color-subtle</span>
+        </div>
+      </div>
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#1a1a1a;"></div>
+        <div class="color-info">
+          <span class="color-name">Near Black</span>
+          <span class="color-hex">#1a1a1a</span>
+          <span class="color-var">--color-text</span>
+        </div>
+      </div>
+
+      <div class="color-chip">
+        <div class="color-swatch" style="background:#fff; border-bottom: 1px solid #eee;"></div>
+        <div class="color-info">
+          <span class="color-name">White</span>
+          <span class="color-hex">#ffffff</span>
+          <span class="color-var">—</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div class="sg-section">
+    <div class="sg-section-title">Typography</div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-name">Barrio — Display XL</div>
+        <div class="t-detail">Hero headings<br>~3–6rem · weight 400</div>
+      </div>
+      <div class="type-sample-serif-xl">Nudibranch</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-name">Barrio — Display LG</div>
+        <div class="t-detail">Section headings<br>~2rem · weight 400</div>
+      </div>
+      <div class="type-sample-serif-lg">Tide Tracker</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-name">Barrio — Display MD</div>
+        <div class="t-detail">Card titles<br>~1.4rem · weight 400</div>
+      </div>
+      <div class="type-sample-serif-md">Collaborations</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-name">Inter — Body LG</div>
+        <div class="t-detail">Lead paragraphs<br>1.1rem · weight 300–400</div>
+      </div>
+      <div class="type-sample-sans-lg">Marine biologist &amp; science communicator</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-name">Inter — Body</div>
+        <div class="t-detail">General body copy<br>0.9rem · weight 400</div>
+      </div>
+      <div class="type-sample-sans-md">Connecting people with the ocean through art, science, and story.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-name">Inter — Label</div>
+        <div class="t-detail">Button / nav text<br>0.78rem · weight 500 · uppercase</div>
+      </div>
+      <div class="type-sample-sans-sm">Work With Me</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-name">Inter — Eyebrow</div>
+        <div class="t-detail">Section eyebrows<br>0.68rem · weight 500 · uppercase</div>
+      </div>
+      <div class="type-sample-sans-xs">Plan Your Tide Pool Visit</div>
+    </div>
+
+  </div>
+
+  <!-- USAGE -->
+  <div class="sg-section">
+    <div class="sg-section-title">Usage Notes</div>
+    <div class="usage-grid">
+
+      <div class="usage-card">
+        <div class="u-label">Primary Font</div>
+        <div class="u-text"><strong>Barrio</strong> — all display headings, logo, and section titles. Never used for body copy.</div>
+      </div>
+
+      <div class="usage-card">
+        <div class="u-label">Secondary Font</div>
+        <div class="u-text"><strong>Inter</strong> — all body text, labels, buttons, navigation, and UI elements.</div>
+      </div>
+
+      <div class="usage-card">
+        <div class="u-label">Dark Sections</div>
+        <div class="u-text">Background: <strong>#0a5284</strong>. Text: white or <strong>#94D2FF</strong>. Used for hero, header, tide tracker.</div>
+      </div>
+
+      <div class="usage-card">
+        <div class="u-label">Light Sections</div>
+        <div class="u-text">Background: <strong>#f2efea</strong> (cream). Text: <strong>#1a1a1a</strong>. Used for content cards and about sections.</div>
+      </div>
+
+      <div class="usage-card">
+        <div class="u-label">Gold Accent</div>
+        <div class="u-text"><strong>#FFBA0D</strong> — exceptional tide ratings, highlight callouts. Use sparingly.</div>
+      </div>
+
+      <div class="usage-card">
+        <div class="u-label">Rust</div>
+        <div class="u-text"><strong>#853700</strong> — subtle labels and secondary text on cream backgrounds only.</div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
