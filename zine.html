@@ -182,6 +182,7 @@
 
       <div class="zine-carousel">
         <div class="zine-carousel-track" id="zine-track">
+          <img src="zine-covers/July2026Zine.png" alt="Slug Life July 2026" class="zine-slide">
           <img src="zine-covers/June2026Zine.png" alt="Slug Life June 2026" class="zine-slide">
           <img src="zine-covers/May2026Zine.png" alt="Slug Life May 2026" class="zine-slide">
         </div>
@@ -189,6 +190,7 @@
         <button class="zine-next" id="zine-next" aria-label="Next">&#8594;</button>
         <div class="zine-dots" id="zine-dots">
           <span class="zine-dot active"></span>
+          <span class="zine-dot"></span>
           <span class="zine-dot"></span>
         </div>
       </div>
@@ -226,7 +228,7 @@
     const track = document.getElementById('zine-track');
     const dots = document.querySelectorAll('.zine-dot');
     let current = 0;
-    const total = 2;
+    const total = 3;
 
     function goTo(n) {
       current = (n + total) % total;
